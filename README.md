@@ -1,2 +1,2 @@
-# geostatistics
+
 Geographical Statistics
