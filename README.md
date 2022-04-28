@@ -1,2 +1,2 @@
 
-Geographical Statistics
+Geostatistics
