@@ -22,9 +22,20 @@ asia <- sf::st_union(frame)
 plot(asia, main = '', reset = FALSE)
 
 
-# numeric; fractional values for expanding the bounding box in each
+# expandBB: numeric; fractional values for expanding the bounding box in each
 # direction (bottom, left, top, right)
 india <- world[world$name_long == 'India', ]
-plot(sf::st_geometry(india), expandBB = c(0, 0.2, 0.1, 1), col = 'grey', lwd = 3)
+china <- world[world$name_long == 'China', ]
+
+plot(sf::st_geometry(india), add = TRUE, expandBB = c(0, 0.2, 0.1, 1), col = 'grey', lwd = 3)
+plot(sf::st_geometry(china), add = TRUE)
+
+
+# ?the use of [0] to keep only the geometry column
 plot(asia[0], add = TRUE)
+
+
+
+
+
 
