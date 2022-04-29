@@ -14,6 +14,7 @@ Books:
 
 Geography:
 * [Projections](https://proj-tmp.readthedocs.io/en/docs/operations/projections/index.html)
+* [Geographic vs. Co&#246;rdinated Reference Systems](https://www.earthdatascience.org/courses/use-data-open-source-python/intro-vector-data-python/spatial-data-vector-shapefiles/geographic-vs-projected-coordinate-reference-systems-python/)  
 * https://www.diva-gis.org
 * https://epsg.io
 * https://hub.arcgis.com/datasets/esri::world-utm-grid/explore?location=-0.000000%2C0.000000%2C1.92
@@ -25,6 +26,7 @@ Tools:
   * [Simple Features](https://r-spatial.github.io/sf/index.html)
   * [Simple Features Reference](https://r-spatial.github.io/sf/reference/index.html)
   * [Geometry Types](http://postgis.net/docs/using_postgis_dbmanagement.html) &Rarr; Chapter 4 of [PostGIS](http://postgis.net/docs/)
+* [HTML Symbols, Entities, Special Characters](https://www.toptal.com/designers/htmlarrows/)  
   
 <br>
 <br>
