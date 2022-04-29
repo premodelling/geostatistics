@@ -27,7 +27,7 @@ class(london_sf)
 
 
 #' London
-#' Note, the longitude/latitude CRS is EPSG:4326, always.
+#' Note, the longitude/latitude CRS is almost always EPSG:4326.
 #'
 
 london <- data.frame(longitude = 0.1, latitude = 51.5) %>%
@@ -51,7 +51,22 @@ st_is_longlat(london)
 
 
 
+#' buffering
+#'
+#' unreference: CRS absent
+#' geographic: unprojected
 
+unreferenced <- data.frame(longitude = 0.1, latitude = 51.5) %>%
+  st_as_sf(coords = c('longitude','latitude')) %>%
+  st_buffer(dist = 1)
+
+geographic <- data.frame(longitude = 0.1, latitude = 51.5) %>%
+  st_as_sf(coords = c('longitude','latitude'), crs = 4326) %>%
+  st_buffer(dist = 1e5)
+
+projected <-  data.frame(x = 530000, y = 180000) %>%
+  st_as_sf(coords = c('x', 'y'), crs = 'EPSG:27700') %>%
+  st_buffer(dist = 1e5)
 
 
 
