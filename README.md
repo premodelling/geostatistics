@@ -7,6 +7,10 @@
 
 ### Notes
 
+Next, focus on Chapters 7, 8, & 9 of [Geocomputation with R](https://geocompr.robinlovelace.net/index.html)
+
+<br>
+
 Books:
 * [Geocomputation with R](https://geocompr.robinlovelace.net/index.html)
 
@@ -23,6 +27,7 @@ Geography:
 
 Tools:
 * Simple Features
+  * [Vignettes](https://r-spatial.github.io/sf/articles/): [*geometry types*](https://r-spatial.github.io/sf/articles/sf1.html)
   * [Simple Features](https://r-spatial.github.io/sf/index.html)
   * [Simple Features Reference](https://r-spatial.github.io/sf/reference/index.html)
   * [Geometry Types](http://postgis.net/docs/using_postgis_dbmanagement.html) &Rarr; Chapter 4 of [PostGIS](http://postgis.net/docs/)
