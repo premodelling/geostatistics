@@ -1,2 +1,77 @@
-# geostatistics
-Geographical Statistics
+<br>
+
+**Geostatistics**
+
+<br>
+<br>
+
+### Notes
+
+Next, focus on Chapters 7, 8, & 9 of [Geocomputation with R](https://geocompr.robinlovelace.net/index.html)
+
+<br>
+
+Books:
+* [Geocomputation with R](https://geocompr.robinlovelace.net/index.html)
+
+<br>
+
+Geography:
+* [Projections](https://proj-tmp.readthedocs.io/en/docs/operations/projections/index.html)
+* [Geographic vs. Co&#246;rdinated Reference Systems](https://www.earthdatascience.org/courses/use-data-open-source-python/intro-vector-data-python/spatial-data-vector-shapefiles/geographic-vs-projected-coordinate-reference-systems-python/)  
+* https://www.diva-gis.org
+* https://epsg.io
+* https://hub.arcgis.com/datasets/esri::world-utm-grid/explore?location=-0.000000%2C0.000000%2C1.92
+
+<br>
+
+Tools:
+* Simple Features
+  * [Vignettes](https://r-spatial.github.io/sf/articles/): [*geometry types*](https://r-spatial.github.io/sf/articles/sf1.html)
+  * [Simple Features](https://r-spatial.github.io/sf/index.html)
+  * [Simple Features Reference](https://r-spatial.github.io/sf/reference/index.html)
+  * [Geometry Types](http://postgis.net/docs/using_postgis_dbmanagement.html) &Rarr; Chapter 4 of [PostGIS](http://postgis.net/docs/)
+* [HTML Symbols, Entities, Special Characters](https://www.toptal.com/designers/htmlarrows/)  
+  
+<br>
+<br>
+
+### Snippets
+
+```R
+library(sp)
+
+# from an sf object to sp object
+SP <- as(world, "Spatial") 
+
+# from sp object to sf object
+SF <- st_as_sf(SP)           
+```
+
+<br>
+<br>
+
+### Independent Development Environment
+
+* Edit the help file skeletons in 'man', possibly combining help files
+  for multiple functions.
+* Edit the exports in 'NAMESPACE', and add necessary imports.
+* Put any C/C++/Fortran code in 'src'.
+* If you have compiled code, add a useDynLib() directive to
+  'NAMESPACE'.
+* Run R CMD build to build the package tarball.
+* Run R CMD check to check the package tarball.
+
+Read "Writing R Extensions" for more information.
+
+<br>
+<br>
+
+<br>
+<br>
+
+<br>
+<br>
+
+<br>
+<br>
