@@ -41,6 +41,8 @@ SP <- as(world, "Spatial")
 SF <- st_as_sf(SP)           
 ```
 
+<br>
+<br>
 
 ### Independent Development Environment
 
