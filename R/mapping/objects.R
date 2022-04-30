@@ -4,11 +4,12 @@
 # Created on: 29/04/2022
 
 
+#' Creating an sf class object
 #' the sf class: geometries + non-geographic attributes
 #'
 
 # simple features geometry object
-london_point <- sf::st_point(x = c(0.1,51.5))
+london_point <- sf::st_point(x = c(0.1, 51.5))
 class(london_point)
 
 # simple features columns object
@@ -26,7 +27,7 @@ class(london_sf)
 
 
 
-#' London
+#' Setting the CRS/SRID
 #' Note, the longitude/latitude CRS is almost always EPSG:4326.
 #'
 
@@ -51,7 +52,7 @@ st_is_longlat(london)
 
 
 
-#' buffering
+#' Buffering
 #'
 #' unreference: CRS absent
 #' geographic: unprojected
