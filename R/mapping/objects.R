@@ -13,7 +13,8 @@ london_point <- sf::st_point(x = c(0.1, 51.5))
 class(london_point)
 
 # simple features columns object
-london_geometry <- st_sfc(london_point, crs = 4326)
+london_geometry <- st_sfc(london_point) %>%
+  st_set_crs(value = 'EPSG:4326')
 class(london_geometry)
 
 # data.frame object
