@@ -7,12 +7,13 @@
 
 ### Notes
 
-Next, focus on Chapters 7, 8, & 9 of [Geocomputation with R](https://geocompr.robinlovelace.net/index.html)
+Next, focus on Chapters 7, 8, & 9 of [Geocomputation with R](https://geocompr.robinlovelace.net/index.html), on [P Diggle](https://www.lancaster.ac.uk/staff/diggle/)
 
 <br>
 
 Books:
 * [Geocomputation with R](https://geocompr.robinlovelace.net/index.html)
+* [Model-based Geostatistics: Methods and Applications in Global Public Health](https://sites.google.com/view/mbgglobalhealth/home)
 
 <br>
 
