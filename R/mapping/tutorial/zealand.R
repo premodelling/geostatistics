@@ -5,8 +5,10 @@
 
 
 # I/O, Borders, File Formats, etc.:https://geocompr.robinlovelace.net/read-write.html
+# tm_layout(): https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_layout
 
 
+# cleaning-up
 rm(list = ls())
 
 
