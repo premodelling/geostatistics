@@ -19,5 +19,19 @@ read_sf(f, query = 'SELECT * FROM world WHERE FID = 1')
 nz <- read_sf(f, query = 'SELECT * FROM world WHERE name_long = "New Zealand"')
 plot(nz)
 
+nz <- ne_countries(country = 'New Zealand')
+class(nz)
+nz <- st_as_sf(nz)
+class(nz)
+plot(nz[, 'admin'])
+
+
+
+
+
+
+
+
+
 
 
