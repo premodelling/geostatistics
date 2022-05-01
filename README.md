@@ -7,12 +7,15 @@
 
 ### Notes
 
-Next, focus on Chapters 7, 8, & 9 of [Geocomputation with R](https://geocompr.robinlovelace.net/index.html)
+Next, focus on **(a)** Chapters 7, 8, & 9 of [Geocomputation with R](https://geocompr.robinlovelace.net/index.html), 
+**(b)** [P Diggle](https://www.lancaster.ac.uk/staff/diggle/), and **(c)** the [vignettes](https://r-spatial.github.io/sf/articles/) of simple features.
 
 <br>
 
 Books:
 * [Geocomputation with R](https://geocompr.robinlovelace.net/index.html)
+* [Model-based Geostatistics: Methods and Applications in Global Public Health](https://sites.google.com/view/mbgglobalhealth/home)
+* [*bookdown*](https://bookdown.org)
 
 <br>
 
@@ -31,6 +34,7 @@ Tools:
   * [Simple Features](https://r-spatial.github.io/sf/index.html)
   * [Simple Features Reference](https://r-spatial.github.io/sf/reference/index.html)
   * [Geometry Types](http://postgis.net/docs/using_postgis_dbmanagement.html) &Rarr; Chapter 4 of [PostGIS](http://postgis.net/docs/)
+* [Journal of maps style guide](https://files.taylorandfrancis.com/TJOM-suppmaterial-quick-guide.pdf)  
 * [HTML Symbols, Entities, Special Characters](https://www.toptal.com/designers/htmlarrows/)  
   
 <br>
