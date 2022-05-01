@@ -40,6 +40,9 @@ class(nz)
 plot(nz[, 'admin'], main = 'New Zealand')
 
 
+tm_shape(nz) +
+  tm_layout(frame = FALSE) +
+  tm_fill()
 
 
 
