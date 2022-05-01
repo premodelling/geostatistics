@@ -37,9 +37,6 @@ nz <- st_as_sf(nz)
 class(nz)
 
 # the administrative boundaries
-plot(nz[, 'admin'], main = 'New Zealand')
-
-
 tm_shape(nz) +
   tm_layout(frame = FALSE) +
   tm_fill()
