@@ -4,35 +4,29 @@
 # Created on: 02/05/2022
 
 
-rm(list=ls())
-
+rm(list = ls())
 
 
 frame <- read.csv(file = 'data/frames/LiberiaRemoData.csv')
-frame$prev <- frame$npos/frame$ntest
-
+frame$prev <- frame$npos / frame$ntest
 
 
 liberia <- st_as_sf(frame, coords = c('utm_x', 'utm_y'))
 st_crs(liberia) <- 32629
 
 
-
 liberia.adm0 <- st_read('data/shapes/Liberia/LBR_adm/LBR_adm0.shp')
-liberia.adm0 <- st_transform(liberia.adm0,crs=32629)
-
+liberia.adm0 <- st_transform(liberia.adm0, crs = 32629)
 
 
 map0 <- tm_shape(liberia.adm0) +
-  tm_borders(lwd=3)
+  tm_borders(lwd = 3)
 map0
-
 
 
 map0 +
   tm_shape(liberia) +
-  tm_dots(size=0.5)
-
+  tm_dots(size = 0.5)
 
 
 Map.with.points <- map0 +
@@ -41,13 +35,12 @@ Map.with.points <- map0 +
              border.col = 'white',
              border.alpha = 0,
              style = 'fixed',
-             breaks = seq(0,0.4,0.05),
+             breaks = seq(0, 0.4, 0.05),
              palette = '-RdYlBu',
              title.size = 'Prevalence',
              scale = 1,
              title.col = 'Prevalence')
 Map.with.points
-
 
 
 Map.with.points <- Map.with.points +
@@ -77,7 +70,6 @@ Map.with.points +
            title.col = 'Waterways')
 
 
-
 liberia.alt <- terra::rast('data/shapes/Liberia/LBR_alt/LBR_alt.vrt')
 class(x = liberia.alt)
 cat(crs(liberia.alt))
@@ -87,12 +79,10 @@ class(x = liberia.alt)
 cat(crs(liberia.alt))
 
 
-
 tm_shape(liberia.alt) +
   tm_raster(title = 'Elevation') +
   tm_shape(liberia.adm0) +
   tm_borders(lwd = 2)
-
 
 
 terra::mask(liberia.alt, terra::vect(liberia.adm0)) %>%
@@ -102,7 +92,6 @@ terra::mask(liberia.alt, terra::vect(liberia.adm0)) %>%
   tm_borders(lwd = 2)
 
 
-
 liberia.alt <- mask(liberia.alt, terra::vect(liberia.adm0))
 tm_shape(liberia.alt) +
   tm_raster(title = 'Elevation (m)') +
@@ -110,9 +99,7 @@ tm_shape(liberia.alt) +
   tm_borders(lwd = 2)
 
 
-
 class(liberia.alt)
-
 
 
 frame$my_elevation <- terra::extract(liberia.alt, terra::vect(liberia)) %>%
