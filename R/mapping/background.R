@@ -44,5 +44,3 @@ plot(asia, add = TRUE, col = 'red')
 
 
 
-
-
