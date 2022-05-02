@@ -111,6 +111,7 @@ tm_shape(liberia.alt) +
 
 
 
+# extract
 rb$my_elevation <- raster::extract(liberia.alt, rb.sf)
 
 
@@ -121,6 +122,7 @@ tm_shape(liberia.grid) +
   tm_dots() +
   tm_shape(liberia.adm0) +
   tm_borders(lwd = 2)
+
 
 
 # subsetting the grid locations that fall inside Liberia
@@ -147,31 +149,17 @@ class(dist.raster)
 
 
 tm_shape(dist.raster) +
-  tm_raster(title = 'Distance from \n closest waterway (km)') +
+  tm_layout(main.title = 'Liberia', frame = FALSE) +
+  tm_raster(title = 'Distance from \nclosest waterway (km)') +
   tm_shape(liberia.adm0) +
-  tm_borders(lwd = 2) +
+  tm_borders(lwd = 0) +
   tm_shape(liberia.wl) +
-  tm_lines(col = 'blue', lwd = 2)
+  tm_lines(col = 'steelblue', lwd = 1)
 
 
 
-writeRaster(dist.raster,
-            'Liberia_dist_cw.tiff',
-            'GTiff')
+writeRaster(dist.raster, filename = 'images/liberia.tif', format = 'GTiff')
 
-liberia.max2km.dist <- 
-extract(dist.raster,
-        st_coordinates(liberia.grid),
-        buffer=5000,
-        fun=max)
-
-dist.raster2 <- rasterFromXYZ(cbind(
-  st_coordinates(liberia.grid),
-  liberia.max2km.dist),
-  crs='+init=epsg:32629')
-plot(dist.raster2)
-
-plot(dist.raster2 )
 
 
 
