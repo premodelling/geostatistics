@@ -158,35 +158,30 @@ tm_shape(dist.raster) +
 
 
 
-writeRaster(dist.raster, filename = 'images/liberia.tif', format = 'GTiff')
+writeRaster(dist.raster, filename = 'images/liberia.tif', format = 'GTiff', overwrite = TRUE)
 
 
 
+# extra
+liberia.adm2 <- st_read('data/shapes/liberia/LBR_adm/LBR_adm2.shp')
+liberia.adm2 <- st_transform(liberia.adm2, crs = 32629)
 
-### Not necessary for the course but useful to know
-liberia.adm2 <- st_read('Liberia spatial data/LBR_adm/LBR_adm2.shp')
-liberia.adm2 <- st_transform(liberia.adm2,crs=32629)
+
 
 names.adm2 <- liberia.adm2$NAME_2
 n.adm2 <- length(names.adm2)
-mean.elev <- rep(NA,n.adm2)
+mean.elev <- rep(NA, n.adm2)
+
+
 
 liberia.adm2$Mean_elevation <- NA
-
-for(i in 1:n.adm2) {
-  ind.sel <- names.adm2==names.adm2[i]
-  elev.r.i <- mask(liberia.alt,
-                    as(
-                    liberia.adm2[ind.sel,],
-                    'Spatial'))
-  liberia.adm2$Mean_elevation[ind.sel] <- 
-    mean(values(elev.r.i),na.rm=TRUE)
+for (i in 1:n.adm2) {
+  ind.sel <- names.adm2 == names.adm2[i]
+  elev.r.i <- mask(liberia.alt, as(liberia.adm2[ind.sel,], Class = 'Spatial'))
+  liberia.adm2$Mean_elevation[ind.sel] <- mean(values(elev.r.i), na.rm = TRUE)
 }
 
 
-map2 <- tm_shape(liberia.adm2) + 
-  tm_borders(lwd=1) 
-
-map2+tm_fill('Mean_elevation',
-             title = 'Mean elevation (m)')
+map2 <- tm_shape(liberia.adm2) + tm_borders(lwd = 1)
+map2 + tm_fill(col = 'Mean_elevation', title = 'Mean elevation (m)')
 
