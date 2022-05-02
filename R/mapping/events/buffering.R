@@ -8,6 +8,8 @@
 #' Buffering
 #'
 #' Herein:
+#'      https://geocompr.robinlovelace.net/reproj-geo-data.html#geom-proj
+#'      https://geocompr.robinlovelace.net/geometric-operations.html#buffers
 #'      unreferenced: reference system absent
 #'      geographic: unprojected
 #'      projected: https://www.earthdatascience.org/courses/use-data-open-source-python/
