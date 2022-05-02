@@ -29,12 +29,24 @@ Geography:
 <br>
 
 Tools:
+
 * Simple Features
   * [Vignettes](https://r-spatial.github.io/sf/articles/): [*geometry types*](https://r-spatial.github.io/sf/articles/sf1.html)
   * [Simple Features](https://r-spatial.github.io/sf/index.html)
   * [Simple Features Reference](https://r-spatial.github.io/sf/reference/index.html)
   * [Geometry Types](http://postgis.net/docs/using_postgis_dbmanagement.html) &Rarr; Chapter 4 of [PostGIS](http://postgis.net/docs/)
+
+* Thematic Maps
+  * [Vignette: Getting Started](https://cran.r-project.org/web/packages/tmap/vignettes/tmap-getstarted.html) &Rarr; *facets*, 
+    *multiple shapes & layers*, *interactive maps*, etc.
+  * [Layers](https://r-tmap.github.io/tmap-book/layers.html#layers) &Rarr; *polygons*, *symbols*, *lines*, *text*, *raster*, *tiles*    
+
+* [Conversions between different spatial classes in R](https://geocompr.github.io/post/2021/spatial-classes-conversion/)
+
+* [File Formats](https://geocompr.robinlovelace.net/read-write.html#file-formats)
+
 * [Journal of maps style guide](https://files.taylorandfrancis.com/TJOM-suppmaterial-quick-guide.pdf)  
+  
 * [HTML Symbols, Entities, Special Characters](https://www.toptal.com/designers/htmlarrows/)  
   
 <br>
