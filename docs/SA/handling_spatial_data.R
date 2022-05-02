@@ -115,36 +115,45 @@ rb$my_elevation <- raster::extract(liberia.alt, rb.sf)
 
 
 
+# a grid that has a resolution of 2 by 2 km
+liberia.grid <- st_make_grid(liberia.adm0, cellsize = 2000, what = 'centers')
+tm_shape(liberia.grid) +
+  tm_dots() +
+  tm_shape(liberia.adm0) +
+  tm_borders(lwd = 2)
 
 
-
-
-# The grid I am creating has a resolution of 2 by 2 km
-liberia.grid <- st_make_grid(liberia.adm0,
-                             cellsize = 2000,
-                             what='centers')
-
-# I am subsetting only the grid locations that fall inside Liberia
-liberia.inout <- st_intersects(liberia.grid,
-                               liberia.adm0,
-                               sparse = FALSE)
+# subsetting the grid locations that fall inside Liberia
+liberia.inout <- st_intersects(liberia.grid, liberia.adm0, sparse = FALSE)
 liberia.grid <- liberia.grid[liberia.inout]
+tm_shape(liberia.grid) +
+  tm_dots() +
+  tm_shape(liberia.adm0) +
+  tm_borders(lwd = 2)
 
-dist <- apply(st_distance(liberia.grid,
-                          liberia.wl),1,min)/1000
 
-# Useful
-dist.raster <- rasterFromXYZ(cbind(
-  st_coordinates(liberia.grid),
-  dist),
-  crs='+init=epsg:32629')
 
-tm_shape(dist.raster)+
-  tm_raster(title='Distance from \n closest waterway (km)')+
-  tm_shape(liberia.adm0)+
-  tm_borders(lwd=2)+
-  tm_shape(liberia.wl)+
-  tm_lines(col='blue',lwd=2)
+# distances
+dist <- apply(st_distance(liberia.grid, liberia.wl), MARGIN = 1, FUN = min)/1000
+class(dist)
+length(dist)
+
+
+
+# a new object
+dist.raster <- raster::rasterFromXYZ(cbind(st_coordinates(liberia.grid), dist), crs='+init=epsg:32629')
+class(dist.raster)
+
+
+
+tm_shape(dist.raster) +
+  tm_raster(title = 'Distance from \n closest waterway (km)') +
+  tm_shape(liberia.adm0) +
+  tm_borders(lwd = 2) +
+  tm_shape(liberia.wl) +
+  tm_lines(col = 'blue', lwd = 2)
+
+
 
 writeRaster(dist.raster,
             'Liberia_dist_cw.tiff',
