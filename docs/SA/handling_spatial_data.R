@@ -52,7 +52,11 @@ Map.with.points
 tmap_mode(mode = 'plot')
 
 
-liberia.wl <- st_read('data/shapes/Liberia/LBR_wat/LBR_water_lines_dcw.shp')
+liberia.wl <- st_read(dsn = 'data/shapes/Liberia/LBR_wat/LBR_water_lines_dcw.shp')
+st_crs(x = liberia.wl)
+st_is_longlat(x = liberia.wl)
+
+
 liberia.wl <- st_transform(liberia.wl, crs = 32629)
 
 Map.with.points+tm_shape(liberia.wl)+
