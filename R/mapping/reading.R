@@ -15,6 +15,7 @@ class(world)
 
 
 # ... shp
+#     st_read(): data.frame, read_sf(): tibble
 world <- st_read(system.file('shapes/world.shp', package = 'spData'))
 class(world)
 world <- read_sf(system.file('shapes/world.shp', package = 'spData'))
