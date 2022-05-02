@@ -8,7 +8,7 @@ rm(list=ls())
 
 
 
-frame <- read.csv(file = '../../../../data/frames/LiberiaRemoData.csv')
+frame <- read.csv(file = 'data/frames/LiberiaRemoData.csv')
 frame$prev <- frame$npos/frame$ntest
 
 
