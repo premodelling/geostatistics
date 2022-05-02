@@ -8,6 +8,7 @@
 #' Simple Features
 #'
 #' Herein:
+#'      https://geocompr.robinlovelace.net/spatial-class.html#sf
 #'      Creating a simple features class object
 #'      Note that a sf class is a combination of ↠ geometries & non-geographic attributes
 #'
