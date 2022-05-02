@@ -1,8 +1,11 @@
+
 rm(list=ls())
+
 
 
 rb <- read.csv(file = 'data/frames/LiberiaRemoData.csv')
 rb$prev <- rb$npos/rb$ntest
+
 
 
 rb.sf <- st_as_sf(rb,coords = c('utm_x', 'utm_y'))
@@ -14,14 +17,17 @@ liberia.adm0 <- st_read('data/shapes/Liberia/LBR_adm/LBR_adm0.shp')
 liberia.adm0 <- st_transform(liberia.adm0,crs=32629)
 
 
+
 map0 <- tm_shape(liberia.adm0) +
   tm_borders(lwd=3) 
 map0
 
 
+
 map0 +
   tm_shape(rb.sf) +
   tm_dots(size=0.5)
+
 
 
 Map.with.points <- map0 +
@@ -37,19 +43,18 @@ Map.with.points <- map0 +
 Map.with.points
 
 
+
 Map.with.points <- Map.with.points +
   tm_compass(type = '8star', position = c('right', 'top')) +
   tm_scale_bar(breaks = c(0, 100, 200), text.size = 1, position = c('center', 'bottom'))
 Map.with.points
 
 
+
 tmap_mode(mode = 'view')
-
-
 Map.with.points
-
-
 tmap_mode(mode = 'plot')
+
 
 
 liberia.wl <- st_read(dsn = 'data/shapes/Liberia/LBR_wat/LBR_water_lines_dcw.shp')
@@ -57,35 +62,62 @@ st_crs(x = liberia.wl)
 st_is_longlat(x = liberia.wl)
 
 
+
 liberia.wl <- st_transform(liberia.wl, crs = 32629)
+st_crs(x = liberia.wl)
 
-Map.with.points+tm_shape(liberia.wl)+
-  tm_lines(col='blue', palette='dodgerblue3',
-           title.col='Waterways')
 
-####
 
-liberia.alt <- raster('Liberia spatial data//LBR_alt/LBR_alt.gri')
-liberia.alt <- projectRaster(liberia.alt,
-               crs=CRS('+init=epsg:32629'))
+Map.with.points +
+  tm_shape(liberia.wl) +
+  tm_lines(col = 'blue',
+           palette = 'dodgerblue3',
+           title.col = 'Waterways')
 
-tm_shape(liberia.alt)+
-tm_raster(title='Elevation')+
-tm_shape(liberia.adm0)+
-tm_borders(lwd=2)
 
-liberia.alt <- mask(liberia.alt,
-                    as(liberia.adm0,'Spatial'))
+liberia.alt <- raster::raster('data/shapes/Liberia/LBR_alt/LBR_alt.gri')
+class(x = liberia.alt)
+crs(liberia.alt)
 
-tm_shape(liberia.alt)+
-tm_raster(title='Elevation (m)')+
-tm_shape(liberia.adm0)+
-tm_borders(lwd=2)
 
-# NOTE: Use the data-set converted to an SF object
-rb$my_elevation <- extract(liberia.alt,rb.sf)
 
-####
+liberia.alt <- raster::projectRaster(liberia.alt, crs = 'EPSG:32629')
+class(x = liberia.alt)
+crs(liberia.alt)
+
+
+
+tm_shape(liberia.alt) +
+  tm_raster(title = 'Elevation') +
+  tm_shape(liberia.adm0) +
+  tm_borders(lwd = 2)
+
+
+
+raster::mask(liberia.alt, as(liberia.adm0, Class = 'Spatial')) %>%
+  tm_shape() +
+  tm_raster(title = 'Elevation (m)') +
+  tm_shape(liberia.adm0) +
+  tm_borders(lwd = 2)
+
+
+
+liberia.alt <- raster::mask(liberia.alt, as(liberia.adm0, Class = 'Spatial'))
+class(liberia.alt)
+tm_shape(liberia.alt) +
+  tm_raster(title = 'Elevation (m)') +
+  tm_shape(liberia.adm0) +
+  tm_borders(lwd = 2)
+
+
+
+rb$my_elevation <- raster::extract(liberia.alt, rb.sf)
+
+
+
+
+
+
 
 # The grid I am creating has a resolution of 2 by 2 km
 liberia.grid <- st_make_grid(liberia.adm0,
