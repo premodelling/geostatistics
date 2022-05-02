@@ -41,6 +41,8 @@ Tools:
     *multiple shapes & layers*, *interactive maps*, etc.
   * [Layers](https://r-tmap.github.io/tmap-book/layers.html#layers) &Rarr; *polygons*, *symbols*, *lines*, *text*, *raster*, *tiles*    
 
+* [Conversions between different spatial classes in R](https://geocompr.github.io/post/2021/spatial-classes-conversion/)
+
 * [File Formats](https://geocompr.robinlovelace.net/read-write.html#file-formats)
 
 * [Journal of maps style guide](https://files.taylorandfrancis.com/TJOM-suppmaterial-quick-guide.pdf)  
