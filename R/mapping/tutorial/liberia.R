@@ -105,23 +105,30 @@ grounds +
            alpha = 0.35)
 
 
+
+#' Liberia's elevations
+#'
+
 liberia.alt <- terra::rast('data/shapes/Liberia/LBR_alt/LBR_alt.vrt')
 class(x = liberia.alt)
 cat(crs(liberia.alt))
-
 liberia.alt <- terra::project(liberia.alt, paste0('EPSG:', utm), method = 'bilinear')
 class(x = liberia.alt)
 cat(crs(liberia.alt))
 
 
+# the elevations, and the country's border
 tm_shape(liberia.alt) +
+  tm_layout(main.title = 'Liberia', frame = FALSE) +
   tm_raster(title = 'Elevation') +
   tm_shape(liberia.adm0) +
   tm_borders(lwd = 2)
 
 
+# the elevations within the country's border ONLY
 terra::mask(liberia.alt, terra::vect(liberia.adm0)) %>%
   tm_shape() +
+  tm_layout(main.title = 'Liberia', frame = FALSE) +
   tm_raster(title = 'Elevation (m)') +
   tm_shape(liberia.adm0) +
   tm_borders(lwd = 2)
@@ -129,11 +136,13 @@ terra::mask(liberia.alt, terra::vect(liberia.adm0)) %>%
 
 liberia.alt <- mask(liberia.alt, terra::vect(liberia.adm0))
 tm_shape(liberia.alt) +
+  tm_layout(main.title = 'Liberia', frame = FALSE) +
   tm_raster(title = 'Elevation (m)') +
   tm_shape(liberia.adm0) +
   tm_borders(lwd = 2)
 
 
+# get the elevation values
 frame$my_elevation <- terra::extract(liberia.alt, terra::vect(liberia)) %>%
   dplyr::select(!ID) %>%
   unlist() %>%
