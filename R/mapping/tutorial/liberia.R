@@ -198,4 +198,48 @@ tm_shape(terrains) +
            palette = 'dodgerblue3',
            alpha = 0.35)
 
+terra::writeRaster(x = terrains, filename = 'images/liberia.tif', overwrite = TRUE, filetype = 'GTiff')
+terra::writeRaster(x = terrains, filename = 'images/liberia.sgi', overwrite = TRUE, filetype = 'SGI', datatype='INT1U')
+
+
+
+
+#' Next administrative level
+#'
+
+liberia.adm2 <- st_read(dsn = 'data/shapes/liberia/LBR_adm/LBR_adm2.shp')
+liberia.adm2 <- st_transform(liberia.adm2, crs = utm)
+
+names.adm2 <- liberia.adm2$NAME_2
+n.adm2 <- length(names.adm2)
+mean.elev <- rep(NA, n.adm2)
+
+liberia.adm2$Mean_elevation <- NA
+for (i in 1:n.adm2) {
+  ind.sel <- names.adm2 == names.adm2[i]
+  elev.r.i <- terra::mask(liberia.alt, terra::vect(liberia.adm2[ind.sel,]))
+  # elev.r.i <- mask(liberia.alt, as(liberia.adm2[ind.sel,], Class = 'Spatial'))
+  liberia.adm2$Mean_elevation[ind.sel] <- mean(values(elev.r.i), na.rm = TRUE)
+}
+
+
+map2 <- tm_shape(liberia.adm2) +
+  tm_borders(lwd = 1)
+map2 +
+  tm_layout(main.title = 'Liberia', frame = FALSE) +
+  tm_fill(col = 'Mean_elevation', title = 'Mean elevation (m)')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
