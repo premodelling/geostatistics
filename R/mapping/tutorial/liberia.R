@@ -134,7 +134,7 @@ terra::mask(liberia.alt, terra::vect(liberia.adm0)) %>%
   tm_borders(lwd = 2)
 
 
-liberia.alt <- mask(liberia.alt, terra::vect(liberia.adm0))
+liberia.alt <- terra::mask(liberia.alt, terra::vect(liberia.adm0))
 tm_shape(liberia.alt) +
   tm_layout(main.title = 'Liberia', frame = FALSE) +
   tm_raster(title = 'Elevation (m)') +
@@ -150,5 +150,52 @@ frame$my_elevation <- terra::extract(liberia.alt, terra::vect(liberia)) %>%
 
 
 
+
+#' Grids
+#'
+
+# a grid that has a resolution of 2 km by 2 km
+liberia.grid <- sf::st_make_grid(liberia.adm0, cellsize = 2000, what = 'centers')
+class(liberia.grid)
+tm_shape(liberia.grid) +
+  tm_layout(main.title = 'Liberia', frame = FALSE) +
+  tm_dots() +
+  tm_shape(liberia.adm0) +
+  tm_borders(lwd = 2)
+
+
+# the grid cells within Liberia ONLY
+liberia.inside <- sf::st_intersects(liberia.grid, liberia.adm0, sparse = FALSE)
+liberia.grid <- liberia.grid[liberia.inside]
+class(liberia.grid)
+tm_shape(liberia.grid) +
+  tm_layout(main.title = 'Liberia', frame = FALSE) +
+  tm_dots() +
+  tm_shape(liberia.adm0) +
+  tm_borders(lwd = 2)
+
+
+
+# per grid cell ... the distance between the grid cell's centre point and each water line, subsequently 
+# the minimum distance
+distances <- apply(sf::st_distance(liberia.grid, liberia.wl), MARGIN = 1, FUN = min)/1000
+class(distances)
+length(distances)
+
+liberia.grid.data <- cbind(st_coordinates(liberia.grid), distances)
+class(liberia.grid.data)
+colnames(liberia.grid.data) <- c('x', 'y', 'distances')
+colnames(liberia.grid.data)
+
+terrains <- terra::rast(liberia.grid.data, type = 'xyz', crs = paste0('EPSG:', utm))
+tm_shape(terrains) +
+  tm_layout(main.title = 'Liberia', frame = FALSE) +
+  tm_raster(title = 'Distance from \nclosest waterway (km)') +
+  tm_shape(liberia.adm0) +
+  tm_borders(lwd = 0) +
+  tm_shape(liberia.wl) +
+  tm_lines(col = 'blue',
+           palette = 'dodgerblue3',
+           alpha = 0.35)
 
 
