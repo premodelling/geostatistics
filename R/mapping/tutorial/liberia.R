@@ -222,7 +222,6 @@ for (i in 1:n.adm2) {
   liberia.adm2$Mean_elevation[ind.sel] <- mean(values(elev.r.i), na.rm = TRUE)
 }
 
-
 map2 <- tm_shape(liberia.adm2) +
   tm_borders(lwd = 1)
 map2 +
