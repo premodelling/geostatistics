@@ -135,7 +135,8 @@ tm_shape(liberia.grid) +
 
 
 
-# distances
+# per grid cell ... the distance between the grid cell's centre point and each water line, subsequently
+# the minimum distance
 dist <- apply(st_distance(liberia.grid, liberia.wl), MARGIN = 1, FUN = min)/1000
 class(dist)
 length(dist)
@@ -146,8 +147,6 @@ length(dist)
 dist.raster <- raster::rasterFromXYZ(cbind(st_coordinates(liberia.grid), dist), crs='+init=epsg:32629')
 class(dist.raster)
 
-
-
 tm_shape(dist.raster) +
   tm_layout(main.title = 'Liberia', frame = FALSE) +
   tm_raster(title = 'Distance from \nclosest waterway (km)') +
@@ -156,23 +155,19 @@ tm_shape(dist.raster) +
   tm_shape(liberia.wl) +
   tm_lines(col = 'steelblue', lwd = 1)
 
-
-
 writeRaster(dist.raster, filename = 'images/liberia.tif', format = 'GTiff', overwrite = TRUE)
 
 
 
-# extra
-liberia.adm2 <- st_read('data/shapes/liberia/LBR_adm/LBR_adm2.shp')
+#' Next administrative level
+#'
+
+liberia.adm2 <- st_read(dsn = 'data/shapes/liberia/LBR_adm/LBR_adm2.shp')
 liberia.adm2 <- st_transform(liberia.adm2, crs = 32629)
-
-
 
 names.adm2 <- liberia.adm2$NAME_2
 n.adm2 <- length(names.adm2)
 mean.elev <- rep(NA, n.adm2)
-
-
 
 liberia.adm2$Mean_elevation <- NA
 for (i in 1:n.adm2) {
@@ -180,7 +175,6 @@ for (i in 1:n.adm2) {
   elev.r.i <- mask(liberia.alt, as(liberia.adm2[ind.sel,], Class = 'Spatial'))
   liberia.adm2$Mean_elevation[ind.sel] <- mean(values(elev.r.i), na.rm = TRUE)
 }
-
 
 map2 <- tm_shape(liberia.adm2) + tm_borders(lwd = 1)
 map2 + tm_fill(col = 'Mean_elevation', title = 'Mean elevation (m)')
