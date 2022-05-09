@@ -9,7 +9,7 @@ point.map(galicia,~log(lead),coords=~x+y,
           pt.divide="quintiles")
 lines(galicia.bndrs,type="l")
 
-vari <- variogram(galicia,~lead,
+vari <- variogram(galicia,~log(lead),
           coords=~I(x/1000)+I(y/1000),
           uvec=seq(10,150,length=15))
 plot(vari,type="b")
@@ -19,7 +19,7 @@ eyefit(vari)
 #     cov.model sigmasq   phi tausq kappa kappa2   practicalRange
 # exponential    1.39 16.22  0.16  <NA>   <NA> 48.5907774765683
 
-spat.corr.diagnostic(lead~1, 
+spat.corr.diagnostic(log(lead)~1, 
                      data=galicia,
                      coords=~I(x/1000)+I(y/1000),
                      likelihood = "Gaussian",
@@ -28,31 +28,44 @@ spat.corr.diagnostic(lead~1,
                      uvec=seq(10,120,length=15),
                      which.test = "variogram")
 
-sigma2.start <- 1.532177e+00 # variance of the spatial Gaussian processs S(x)
-phi.start <-  1.778915e+01 # scale of the spatial correlation
-tau2.start <- 2.018670e-09 # the variance of the nugget effect
+sigma2.start <- 0.18 # variance of the spatial Gaussian processs S(x)
+phi.start <-  30 # scale of the spatial correlation
+tau2.start <- 0.03 # the variance of the nugget effect
 
 lgm.fit.mle <- 
-  linear.model.MLE(lead~1, coords=~I(x/1000)+I(y/1000), 
+  linear.model.MLE(log(lead)~1, coords=~I(x/1000)+I(y/1000), 
                    data = galicia,
                    start.cov.pars = c(phi.start,
                                       tau2.start/sigma2.start),
-                   kappa=0.5) # exponential correlation function
-
-summary(lgm.fit.mle)
-
-# I am excluding the nugget from th emodel 
-# Y_i = alpha + S(x_i)
-lgm.fit.mle <- 
-linear.model.MLE(lead~1, coords=~I(x/1000)+I(y/1000), 
-                 data = galicia,
-                 start.cov.pars = phi.start,
-                 fixed.rel.nugget = 0,
-                 kappa=0.5)
+                   kappa=0.5,# exponential correlation function
+                   method="nlminb") 
 
 summary(lgm.fit.mle,log.cov.pars=FALSE)
 
-variog.diagnostic.lm(lgm.fit.mle)
+# I am excluding the nugget from th model 
+# Y_i = alpha + S(x_i)
+lgm.fit.mle <- 
+linear.model.MLE(log(lead)~1, coords=~I(x/1000)+I(y/1000), 
+                 data = galicia,
+                 start.cov.pars = phi.start,
+                 fixed.rel.nugget = 0,
+                 kappa=0.5,
+                 method="nlminb")
+
+summary(lgm.fit.mle,log.cov.pars=TRUE)
+
+# Estimate for phi (scale parameter)
+phi.hat <- exp(3.0242)
+
+# Function of the estimated correlation function
+curve(exp(-x/phi.hat),xlim=c(0,50))
+
+# Practical range (distance at which the spatial correlation is 0.05)
+3*phi.hat
+
+# Confidence interval for phi
+exp(3.0242+c(-1,1)*qnorm(0.975)*0.2556)
+
 
 library(splancs)
 grid.pred.galicia <- gridpts(as.matrix(galicia.bndrs),
@@ -62,6 +75,10 @@ grid.pred.galicia <- gridpts(as.matrix(galicia.bndrs),
 pred.lead.MLE <- spatial.pred.linear.MLE(lgm.fit.mle,
                                      grid.pred = grid.pred.galicia,
                                      standard.errors = TRUE,
+                                    
+                              #"logit" here means "prediction on the scale of the linear
+                              #                    regression"
+                                     
                                      scale.predictions = "logit",
                                      n.sim.prev = 1000)
 
@@ -69,6 +86,29 @@ plot(pred.lead.MLE,type="logit",summary="predictions")
 plot(pred.lead.MLE,type="logit",summary="standard.errors")
 
 points(galicia[,c("x","y")]/1000,pch=20)
+
+lead.pred.samples <- exp(pred.lead.MLE$samples)
+dim(lead.pred.samples)
+
+hist(lead.pred.samples[3,])
+
+# Predicted lead
+pred.lead <- apply(lead.pred.samples, 1, mean)
+length(pred.lead)
+
+# Standard errors (lead concentration un-logged scale)
+sd.lead <- apply(lead.pred.samples, 1, sd)
+
+# Exceeding 4 
+lead.above4 <- apply(lead.pred.samples, 1, function(x) mean(x>4))
+
+r.lead <- rasterFromXYZ(cbind(grid.pred.galicia,pred.lead))
+r.sd <- rasterFromXYZ(cbind(grid.pred.galicia,sd.lead))
+r.above4 <- rasterFromXYZ(cbind(grid.pred.galicia,lead.above4))
+
+plot(r.lead)
+plot(r.above4)
+
 ####
 
 log.prior.sigma2.galicia <- function(sigma2) {
