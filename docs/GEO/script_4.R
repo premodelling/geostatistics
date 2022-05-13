@@ -74,11 +74,20 @@ summary(lgm.fit.mle, log.cov.pars = FALSE)
 summary(lgm.fit.mle, log.cov.pars = TRUE)
 
 
+
+#' Estimates
+#'
+#'
+
+# Summary of estimates, covariance parameters
+E <- summary(lgm.fit.mle, log.cov.pars = TRUE)
+V <-data.frame(E$cov.pars)
+
 # Estimate for phi (scale parameter)
-phi.hat <- exp(3.0242)
+phi.hat <- exp(x = V['log(phi)', 'Estimate'])
 
 # Function of the estimated correlation function
-curve(exp(-x/phi.hat),xlim=c(0,50))
+curve(exp(-x/phi.hat), xlim = c(0,50))
 
 # Practical range (distance at which the spatial correlation is 0.05)
 3*phi.hat
