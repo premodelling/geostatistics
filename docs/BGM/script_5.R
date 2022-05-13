@@ -109,5 +109,31 @@ pred.mle <- spatial.pred.binomial.MCML(fit.mle,
                                        thresholds = 0.2,
                                        scale.thresholds = 'prevalence')
 
-plot(pred.mle, "prevalence", "predictions")
-plot(pred.mle, summary="exceedance.prob")
+# predictions
+plot(pred.mle, 'prevalence', 'predictions')
+plot(pred.mle, summary = 'exceedance.prob')
+
+
+# optionally
+X <- data.frame(logit_p = pred.mle$logit$predictions,
+                prevalence_p = pred.mle$prevalence$predictions,
+                e_probability = as.numeric(pred.mle$exceedance.prob),
+                utm_x = pred.mle$grid$utm_x,
+                utm_y = pred.mle$grid$utm_y)
+X <- st_as_sf(X, coords = c('utm_x', 'utm_y'))
+st_crs(X) <- utm
+
+tm_shape(X) +
+  tm_layout(main.title = 'Liberia', frame = FALSE) +
+  tm_bubbles(col = 'prevalence_p',
+             border.col = 'white',
+             border.alpha = 0,
+             breaks = seq(0, 0.4, 0.1),
+             scale = 1,
+             title.col = 'Prevalence')
+
+
+
+
+
+
