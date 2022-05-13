@@ -59,8 +59,8 @@ lgm.fit.mle <- linear.model.MLE(log(lead) ~ 1,
                                 data = galicia,
                                 start.cov.pars = c(phi.start, tau2.start/sigma2.start),
                                 kappa = 0.5, method = 'nlminb')
-summary(lgm.fit.mle, log.cov.pars = FALSE)
-summary(lgm.fit.mle, log.cov.pars = TRUE)
+# summary(lgm.fit.mle, log.cov.pars = FALSE)
+# summary(lgm.fit.mle, log.cov.pars = TRUE)
 
 # Model B:
 #     Excludes the nugget term Z_{i}, therefore Y_{i} = \alpha + S(x_{i})
@@ -176,68 +176,71 @@ plot(r.above4, main = 'Chance of lead quantities exc. 4')
 
 
 
-#' Extra
+#' Extra: Bayesian Modelling
 #'
 #'
 
-# Priors
+# ... priors
 log.prior.sigma2.galicia <- function(sigma2) {
-  dunif(sigma2, min = 0,10,log=TRUE)
+  dunif(sigma2, min = 0,max = , log = TRUE)
 }
-
 log.prior.phi.galicia <- function(phi) {
-  dunif(phi,0,50,log=TRUE)
+  dunif(phi, min = 0,max = 50, log = TRUE)
 }
+cp <- control.prior(beta.mean = 0, beta.covar = 10^10,
+                    log.prior.sigma2 = log.prior.sigma2.galicia,
+                    log.prior.phi = log.prior.phi.galicia)
 
-cp <- 
-control.prior(beta.mean = 0,beta.covar = 10^10,
-              log.prior.sigma2 = log.prior.sigma2.galicia,
-              log.prior.phi = log.prior.phi.galicia)
+# ... MCMC settings
+bayes.mcmc <- control.mcmc.Bayes(n.sim = 2000, burnin = 1000, thin = 1,
+                                 epsilon.S.lim = 0.1,
+                                 start.nugget = NULL, L.S.lim = 5)
 
+# ... model
+lgm.fit.bayes <- linear.model.Bayes(lead ~ 1, coords = ~I(x/1000) + I(y/1000),
+                                    data = galicia, kappa = 0.5, control.prior = cp,
+                                    control.mcmc = bayes.mcmc)
 
-bayes.mcmc <- 
-control.mcmc.Bayes(n.sim=2000,burnin=1000,thin=1,
-                   epsilon.S.lim = 0.1,
-                   start.nugget = NULL,
-                   L.S.lim = 5)
+# ... hence, the trace plots
+trace.plot(lgm.fit.bayes, param = 'beta', component.beta = 1)
+autocor.plot(lgm.fit.bayes, param = 'beta',component.beta = 1)
 
-lgm.fit.bayes <- 
-linear.model.Bayes(lead~1, coords=~I(x/1000)+I(y/1000),
-                   data=galicia,kappa=0.5,
-                   control.prior = cp,
-                   control.mcmc = bayes.mcmc)
+trace.plot(lgm.fit.bayes, param = 'sigma2')
+autocor.plot(lgm.fit.bayes, param = 'sigma2', component.beta = 1)
 
-trace.plot(lgm.fit.bayes,"beta",component.beta = 1)
-autocor.plot(lgm.fit.bayes,"beta",component.beta = 1)
-
-trace.plot(lgm.fit.bayes,"sigma2")
-autocor.plot(lgm.fit.bayes,"sigma2",component.beta = 1)
-
-trace.plot(lgm.fit.bayes,"phi")
-autocor.plot(lgm.fit.bayes,"phi",component.beta = 1)
-
-pred.lead.Bayes <- 
-spatial.pred.linear.Bayes(lgm.fit.bayes,
-                            grid.pred = grid.pred.galicia,
-                            scale.predictions = "logit",
-                          standard.errors = TRUE)
-plot(pred.lead.Bayes,"logit","predictions")
-plot(pred.lead.Bayes,"logit","standard.errors")
+trace.plot(lgm.fit.bayes, param = 'phi')
+autocor.plot(lgm.fit.bayes, param = 'phi', component.beta = 1)
 
 
-###
+
+
+#' Extra: Bayesian Modelling (Predictions)
+#'
+#'
+
+pred.lead.Bayes <- spatial.pred.linear.Bayes(lgm.fit.bayes, grid.pred = grid.pred.galicia,
+                                             scale.predictions = 'logit', standard.errors = TRUE)
+plot(pred.lead.Bayes, 'logit', 'predictions')
+plot(pred.lead.Bayes, 'logit', 'standard.errors')
+
+
+
+
+#' The plain & Bayesian Models
+#'
+#'
 
 plot(pred.lead.MLE$logit$predictions,
      pred.lead.Bayes$logit$predictions,
-     xlab="MLE",ylab="Bayes",
-     main="Predictions")
-abline(0,1,col=2,lwd=2)
+     xlab = 'MLE', ylab = 'Bayes', main = 'Predictions')
+abline(a = 0, b = 1, col = 2, lwd = 2)
 
 plot(pred.lead.MLE$logit$standard.errors,
      pred.lead.Bayes$logit$standard.errors,
-     xlab="MLE",ylab="Bayes",
-     main="Predictions")
-abline(0,1,col=2,lwd=2)
+     xlab = 'MLE', ylab = 'Bayes', main = 'Predictions')
+abline(a = 0, b = 1, col = 2, lwd = 2)
+
+
 
 ###
 
