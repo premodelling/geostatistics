@@ -197,7 +197,7 @@ bayes.mcmc <- control.mcmc.Bayes(n.sim = 2000, burnin = 1000, thin = 1,
                                  start.nugget = NULL, L.S.lim = 5)
 
 # ... model
-lgm.fit.bayes <- linear.model.Bayes(lead ~ 1, coords = ~I(x/1000) + I(y/1000),
+lgm.fit.bayes <- linear.model.Bayes(log(lead) ~ 1, coords = ~I(x/1000) + I(y/1000),
                                     data = galicia, kappa = 0.5, control.prior = cp,
                                     control.mcmc = bayes.mcmc)
 
@@ -242,7 +242,10 @@ abline(a = 0, b = 1, col = 2, lwd = 2)
 
 
 
-###
 
-library(help=PrevMap)
+#' Addendum
+#'
+#'
+
+library(help = PrevMap)
 variog.diagnostic.lm(lgm.fit.mle)
