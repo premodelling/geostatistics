@@ -1,58 +1,78 @@
 rm(list = ls())
-library(PrevMap)
 
-galicia <- read.csv("galicia.csv")
-galicia <- galicia[galicia$survey==2000,]
-galicia.bndrs <- read.csv("galicia_bndrs.csv")
 
-point.map(galicia,~log(lead),coords=~x+y,
-          pt.divide="quintiles")
-lines(galicia.bndrs,type="l")
+#' Preliminaries
+#'
+#'
 
-vari <- variogram(galicia,~log(lead),
-          coords=~I(x/1000)+I(y/1000),
-          uvec=seq(10,150,length=15))
-plot(vari,type="b")
+# Survey
+galicia <- read.csv(file = 'data/frames/GaliciaData.csv')
+galicia <- galicia[galicia$survey == 2000,]
 
-library(geoR)
-eyefit(vari)
-#     cov.model sigmasq   phi tausq kappa kappa2   practicalRange
-# exponential    1.39 16.22  0.16  <NA>   <NA> 48.5907774765683
+# Boundary
+galicia.bndrs <- read.csv(file = 'docs/GEO/galicia_boundaries.csv')
 
-spat.corr.diagnostic(log(lead)~1, 
-                     data=galicia,
-                     coords=~I(x/1000)+I(y/1000),
-                     likelihood = "Gaussian",
-                     ID.coords = 1:nrow(galicia),
-                     lse.variogram = TRUE,
-                     uvec=seq(10,120,length=15),
-                     which.test = "variogram")
+point.map(galicia, ~log(lead), coords = ~ x + y, pt.divide = 'quintiles', frame.plot = FALSE)
+lines(galicia.bndrs, type = 'l')
 
-sigma2.start <- 0.18 # variance of the spatial Gaussian processs S(x)
-phi.start <-  30 # scale of the spatial correlation
-tau2.start <- 0.03 # the variance of the nugget effect
+# A variogram w.r.t. ln(lead): Is the aim structural dependence determination?
+vari <- variogram(galicia, ~log(lead), coords = ~ I(x/1000) + I(y/1000),
+                  uvec = seq(10, 150, length=15))
+plot(vari, type = 'b', frame.plot = FALSE)
 
-lgm.fit.mle <- 
-  linear.model.MLE(log(lead)~1, coords=~I(x/1000)+I(y/1000), 
-                   data = galicia,
-                   start.cov.pars = c(phi.start,
-                                      tau2.start/sigma2.start),
-                   kappa=0.5,# exponential correlation function
-                   method="nlminb") 
 
-summary(lgm.fit.mle,log.cov.pars=FALSE)
 
-# I am excluding the nugget from th model 
-# Y_i = alpha + S(x_i)
-lgm.fit.mle <- 
-linear.model.MLE(log(lead)~1, coords=~I(x/1000)+I(y/1000), 
-                 data = galicia,
-                 start.cov.pars = phi.start,
-                 fixed.rel.nugget = 0,
-                 kappa=0.5,
-                 method="nlminb")
 
-summary(lgm.fit.mle,log.cov.pars=TRUE)
+#' Starting Values
+#'
+#'
+
+# The rationale for eyefit() is unclear
+# eyefit(vari)
+
+# A systematic approach
+par(bty = 'n')
+initial.values <- spat.corr.diagnostic(
+  formula = log(lead) ~ 1, data = galicia, coords = ~ I(x/1000) + I(y/1000),
+  likelihood = 'Gaussian', ID.coords = 1:nrow(galicia), lse.variogram = TRUE,
+  uvec = seq(10, 120, length=15), which.test = 'variogram')
+
+# variance of the spatial Gaussian processs S(x)
+sigma2.start <- initial.values$lse.variogram['sigma^2']
+
+# scale of the spatial correlation
+phi.start <-  initial.values$lse.variogram['phi']
+
+# the variance of the nugget effect
+tau2.start <- initial.values$lse.variogram['tau^2']
+
+
+
+#' Modelling
+#'
+#'
+
+# Model A:
+#     kappa = 5 implies exponential correlation function
+lgm.fit.mle <- linear.model.MLE(log(lead) ~ 1,
+                                coords = ~ I(x/1000) + I(y/1000),
+                                data = galicia,
+                                start.cov.pars = c(phi.start, tau2.start/sigma2.start),
+                                kappa = 0.5, method = 'nlminb')
+summary(lgm.fit.mle, log.cov.pars = FALSE)
+summary(lgm.fit.mle, log.cov.pars = TRUE)
+
+# Model B:
+#     Excludes the nugget term Z_{i}, therefore Y_{i} = \alpha + S(x_{i})
+lgm.fit.mle <- linear.model.MLE(log(lead) ~ 1,
+                                coords = ~ I(x/1000) + I(y/1000),
+                                data = galicia,
+                                start.cov.pars = phi.start,
+                                fixed.rel.nugget = 0,
+                                kappa = 0.5, method = 'nlminb')
+summary(lgm.fit.mle, log.cov.pars = FALSE)
+summary(lgm.fit.mle, log.cov.pars = TRUE)
+
 
 # Estimate for phi (scale parameter)
 phi.hat <- exp(3.0242)
