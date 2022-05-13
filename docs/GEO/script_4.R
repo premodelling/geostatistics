@@ -94,7 +94,6 @@ spatial.correlation.limit <- 0.05
 practical.distance <- - phi.hat * log(spatial.correlation.limit)
 practical.distance
 
-
 # Confidence intervals
 interval <- qnorm(p = 0.975, lower.tail = TRUE)*V[, 'StdErr']
 V[, c('lower.c.i', 'upper.c.i')] <- V[, 'Estimate'] +
@@ -105,52 +104,85 @@ exp(V['log(phi)', c('lower.c.i', 'upper.c.i')])
 exp(V['log(phi)', 'Estimate'] + c(-1, 1)*qnorm(p= 0.975)*V['log(phi)', 'StdErr'])
 
 
-library(splancs)
-grid.pred.galicia <- gridpts(as.matrix(galicia.bndrs),
-                             xs=5000,ys=5000)/1000
 
 
+#' Predicting
+#'
+#'
+
+# Generating prediction points within an area's polygon
+grid.pred.galicia <- splancs::gridpts(as.matrix(galicia.bndrs),
+                                      xs = 5000, ys = 5000)/1000
+
+# "logit" here means "prediction on the scale of the linear regression"
 pred.lead.MLE <- spatial.pred.linear.MLE(lgm.fit.mle,
-                                     grid.pred = grid.pred.galicia,
-                                     standard.errors = TRUE,
-                                    
-                              #"logit" here means "prediction on the scale of the linear
-                              #                    regression"
-                                     
-                                     scale.predictions = "logit",
-                                     n.sim.prev = 1000)
+                                         grid.pred = grid.pred.galicia,
+                                         standard.errors = TRUE,
+                                         scale.predictions = 'logit',
+                                         n.sim.prev = 1000)
 
-plot(pred.lead.MLE,type="logit",summary="predictions")
-plot(pred.lead.MLE,type="logit",summary="standard.errors")
+# ... predictions
+plot(pred.lead.MLE, type = 'logit', summary = 'predictions')
 
-points(galicia[,c("x","y")]/1000,pch=20)
+# ... standard errors
+plot(pred.lead.MLE, type = 'logit', summary = 'standard.errors')
+points(galicia[, c('x','y')]/1000, pch = 20)
 
+# ... the samples
 lead.pred.samples <- exp(pred.lead.MLE$samples)
 dim(lead.pred.samples)
-
 hist(lead.pred.samples[3,])
+hist(lead.pred.samples[1009,])
+hist(lead.pred.samples[1179,])
+
+
+
+
+#' Predictions Based on Predicted Samples
+#'
+#'
 
 # Predicted lead
-pred.lead <- apply(lead.pred.samples, 1, mean)
-length(pred.lead)
+pred.lead <- apply(lead.pred.samples, MARGIN = 1, mean)
 
 # Standard errors (lead concentration un-logged scale)
-sd.lead <- apply(lead.pred.samples, 1, sd)
+sd.lead <- apply(lead.pred.samples, MARGIN = 1, sd)
 
-# Exceeding 4 
-lead.above4 <- apply(lead.pred.samples, 1, function(x) mean(x>4))
+# Fraction exceeding 4:
+#     apply(lead.pred.samples, MARGIN = 1, FUN = function(x) sum(x > 4)/length(x))
+lead.above4 <- apply(lead.pred.samples, MARGIN = 1, FUN = function(x) mean(x > 4))
 
-r.lead <- rasterFromXYZ(cbind(grid.pred.galicia,pred.lead))
-r.sd <- rasterFromXYZ(cbind(grid.pred.galicia,sd.lead))
-r.above4 <- rasterFromXYZ(cbind(grid.pred.galicia,lead.above4))
 
-plot(r.lead)
-plot(r.above4)
 
-####
+#' Hence, Maps
+#'
+#'
 
+class(grid.pred.galicia)
+
+# ... A raster object w.r.t. the created grid points, and their lead prediction values
+r.lead <- raster::rasterFromXYZ(cbind(grid.pred.galicia, pred.lead))
+
+# ... A raster object w.r.t. the created grid points, and the uncertainty of the predicted lead values
+r.sd <- raster::rasterFromXYZ(cbind(grid.pred.galicia, sd.lead))
+
+# ... A raster object w.r.t. the created grid points, and chance of exceeding 4
+r.above4 <- raster::rasterFromXYZ(cbind(grid.pred.galicia, lead.above4))
+
+plot(r.lead, main = 'Lead')
+plot(r.above4, main = 'Chance of lead quantities exc. 4')
+
+
+
+
+
+#' Extra
+#'
+#'
+
+# Priors
 log.prior.sigma2.galicia <- function(sigma2) {
-  dunif(sigma2,0,10,log=TRUE)
+  dunif(sigma2, min = 0,10,log=TRUE)
 }
 
 log.prior.phi.galicia <- function(phi) {
