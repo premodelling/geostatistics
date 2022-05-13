@@ -86,11 +86,14 @@ V <-data.frame(E$cov.pars)
 # Estimate for phi (scale parameter)
 phi.hat <- exp(x = V['log(phi)', 'Estimate'])
 
-# Function of the estimated correlation function
+# The curve of spatial correlations w.r.t. distance ∈ [0, 50] and function ρ(u) = exp(-u/φ)
 curve(exp(-x/phi.hat), xlim = c(0,50))
 
 # Practical range (distance at which the spatial correlation is 0.05)
-3*phi.hat
+spatial.correlation.limit <- 0.05
+practical.distance <- - phi.hat * log(spatial.correlation.limit)
+practical.distance
+
 
 # Confidence interval for phi
 exp(3.0242+c(-1,1)*qnorm(0.975)*0.2556)
