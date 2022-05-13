@@ -61,29 +61,49 @@ fit.mle <- binomial.logistic.MCML(npos ~ I(log(elevation)),
 summary(fit.mle)
 
 
-# area of interest
-liberia.bndrs <- read.csv(file = 'docs/BGM/liberia_boundaries.csv')
-liberia.grid <- splancs::gridpts(as.matrix(liberia.bndrs[, c('utm_x', 'utm_y')])/1000, xs = 3, ys = 3)
 
-elevation <- raster(x = 'data/shapes/liberia/LBR_alt/LBR_alt.gri')
-elevation <- projectRaster(elevation, crs = CRS(projargs = '+init=epsg:32629'))
-tm_shape(elevation) +
+
+
+#' Spatial predictions within Liberia
+#'
+#'
+
+
+# ... the country border
+utm <- 32629
+liberia.adm0 <- st_read(dsn = 'data/shapes/Liberia/LBR_adm/LBR_adm0.shp')
+liberia.adm0 <- st_transform(liberia.adm0, crs = utm)
+tm_shape(liberia.adm0) +
   tm_layout(main.title = 'Liberia', frame = FALSE) +
-  tm_raster(title = 'Elevation')
+  tm_borders(lwd = 3)
+
+# ... a within-border grid that has a resolution of 3 km by 3 km
+liberia.grid <- sf::st_make_grid(liberia.adm0, cellsize = 3000, what = 'centers')
+liberia.inside <- sf::st_intersects(liberia.grid, liberia.adm0, sparse = FALSE)
+liberia.grid <- liberia.grid[liberia.inside]
+tm_shape(liberia.grid) +
+  tm_layout(main.title = 'Liberia', frame = FALSE) +
+  tm_dots()
+
+# ... elevations map ... terra::mask() excludes elevations outwith Liberia
+liberia.alt <- terra::rast('data/shapes/Liberia/LBR_alt/LBR_alt.vrt')
+liberia.alt <- terra::project(liberia.alt, paste0('EPSG:', utm), method = 'bilinear')
+liberia.alt <- terra::mask(liberia.alt, terra::vect(liberia.adm0))
+tm_shape(liberia.alt) +
+  tm_layout(main.title = 'Liberia', frame = FALSE) +
+  tm_raster(title = 'Elevation (m)')
+
+# ... the elevation value per Liberia grid point
+P <- terra::extract(liberia.alt, terra::vect(liberia.grid), xy = TRUE) %>%
+  dplyr::select(!ID)
+P <- rename(P, 'elevation' = 'LBR_alt', 'utm_x' = 'x', 'utm_y' = 'y')
+H <- P[complete.cases(P), ]
 
 
-# review
-elevation.pred <- extract(elevation, liberia.grid*1000)
-
-ind.na <- which(is.na(elevation.pred))
-liberia.grid <- liberia.grid[-ind.na,]
-elevation.pred <- elevation.pred[-ind.na]
-
-predictors.rb <- data.frame(elevation=elevation.pred)
-  
+# predict
 pred.mle <- spatial.pred.binomial.MCML(fit.mle,
-                                       grid.pred = liberia.grid,
-                                       predictors = predictors.rb,
+                                       grid.pred = H[, c('utm_x', 'utm_y')],
+                                       predictors = H,
                                        control.mcmc = mcml,
                                        scale.predictions = c('logit', 'prevalence'),
                                        thresholds = 0.2,
