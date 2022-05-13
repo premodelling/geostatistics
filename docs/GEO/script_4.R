@@ -95,8 +95,14 @@ practical.distance <- - phi.hat * log(spatial.correlation.limit)
 practical.distance
 
 
-# Confidence interval for phi
-exp(3.0242+c(-1,1)*qnorm(0.975)*0.2556)
+# Confidence intervals
+interval <- qnorm(p = 0.975, lower.tail = TRUE)*V[, 'StdErr']
+V[, c('lower.c.i', 'upper.c.i')] <- V[, 'Estimate'] +
+  (matrix(interval, nrow = length(interval), ncol = 1) %*% matrix(c(-1, 1), nrow = 1, ncol = 2))
+
+# ... phi
+exp(V['log(phi)', c('lower.c.i', 'upper.c.i')])
+exp(V['log(phi)', 'Estimate'] + c(-1, 1)*qnorm(p= 0.975)*V['log(phi)', 'StdErr'])
 
 
 library(splancs)
