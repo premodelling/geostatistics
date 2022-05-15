@@ -66,7 +66,7 @@ plot(r.pred.lm)
 
 #' Question 2
 
-# Linear geostatistical model
+# Initial values for a linear geostatistical model
 initial.values <- spat.corr.diagnostic(logit ~ 1, data = rb, coords = ~ utm_x + utm_y,
                                        likelihood = 'Gaussian', lse.variogram = TRUE)
 sigma2.guess <- initial.values$lse.variogram['sigma^2']
@@ -74,12 +74,12 @@ phi.guess <- initial.values$lse.variogram['phi']
 tau2.guess <- initial.values$lse.variogram['tau^2']
 
 
+# The linear geostatistical model
 fit.mle <- linear.model.MLE(logit ~ 1,
-                            coords = ~utm_x + utm_y,
+                            coords = ~ utm_x + utm_y,
                             kappa = 0.5,
                             start.cov.pars = c(phi.guess, tau2.guess / sigma2.guess),
                             data = rb, method = 'nlminb')
-
 summary(fit.mle, log.cov.pars = FALSE)
 
 
