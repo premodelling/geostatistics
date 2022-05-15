@@ -137,19 +137,22 @@ c.mcmc <- control.mcmc.MCML(n.sim = 10000,
                             burnin = 2000,
                             thin = 8)
 
-# ... initial values of parameters c(beta, sigmasqr, phi, tausqr)
 
-spat.corr.diagnostic(npos ~ log(elevation),
-                     units.m = ~ ntest,
-                     data = rb,
-                     coords = ~ I(utm_x/1000) + I(utm_y/1000),
-                     likelihood = 'Binomial',
-                     lse.variogram = TRUE)
+# ... initial values of parameters c(beta, sigmasqr, phi, tausqr)
+initial.values.binomial <- spat.corr.diagnostic(
+  npos ~ log(elevation), units.m = ~ ntest, data = rb,
+  coords = ~ I(utm_x/1000) + I(utm_y/1000), likelihood = 'Binomial', lse.variogram = TRUE)
 
 glm.fit <- glm(cbind(npos, ntest - npos) ~ log(elevation), data = rb, family = binomial)
-par0 <- c(coef(glm.fit), 0.2, 32)
+
+par0 <- c(coef(glm.fit),
+          initial.values.binomial$lse.variogram['sigma^2'],
+          initial.values.binomial$lse.variogram['phi'])
 
 
+# ... binomial geostatistical model
+# ... note that a nugget effect is excluded, which explains why
+#     a tausqr setting wasn't required in par0
 fit.bin.elev <- binomial.logistic.MCML(npos ~ log(elevation),
                                        units.m = ~ntest,
                                        coords = ~utm_x + utm_y,
