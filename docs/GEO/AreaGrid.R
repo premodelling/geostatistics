@@ -3,7 +3,7 @@
 # Created by: greyhypotheses
 # Created on: 15/05/2022
 
-BasicAreaGrid <- function (area) {
+AreaGrid <- function (area) {
 
   points <- st_make_grid(area, cellsize = 2000, what = 'centers')
 
