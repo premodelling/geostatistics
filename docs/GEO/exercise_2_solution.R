@@ -174,6 +174,7 @@ pred.mle.bin.elev <- spatial.pred.binomial.MCML(fit.bin.elev,
 
 # ... comparing with linear model predictions
 par(mfrow = c(1, 2))
+
 plot(pred.mle.lm.elev$prevalence$predictions,
      pred.mle.bin.elev$prevalence$predictions,
      xlab = 'Linear model (empirical logit)',
@@ -217,8 +218,8 @@ par0 <- c(coef(glm.fit),
 # ... binomial geostatistical model
 # ... herein,  a nugget effect is included
 fit.bin.elev <- binomial.logistic.MCML(npos ~ log(elevation),
-                                       units.m = ~ntest,
-                                       coords = ~utm_x + utm_y,
+                                       units.m = ~ ntest,
+                                       coords = ~ I(utm_x/1000) + I(utm_y/1000),
                                        kappa = 0.5, control.mcmc = c.mcmc,
                                        par0 = par0,
                                        start.cov.pars = c(initial.values.binomial$lse.variogram['phi'],
