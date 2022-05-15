@@ -1,4 +1,5 @@
 rm(list = ls())
+par(bty = 'n')
 
 source(file = 'docs/GEO/AreaGrid.R')
 
@@ -56,8 +57,7 @@ predictors.rb <- data.frame(elevation = elevation.pred)
 #   f(x) = exp(x)/(1 + exp(x)) = 1/(1 + exp(-x))
 #
 pred.lm <- 1 / (1 + exp(-as.numeric(predict(lm.fit, newdata = predictors.rb))))
-r.pred.lm <- raster::rasterFromXYZ(cbind(st_coordinates(liberia.grid), pred.lm))
-par(bty = 'n')
+r.pred.lm <- raster::rasterFromXYZ(cbind(liberia.grid, pred.lm))
 plot(r.pred.lm)
 
 
