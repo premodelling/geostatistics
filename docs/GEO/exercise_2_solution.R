@@ -186,7 +186,7 @@ plot(pred.mle.lm.elev$exceedance.prob,
      ylab = 'Binomial model', pch = 20)
 abline(a = 0, b = 1, col = 2, lwd = 2)
 
-
+par(mfrow = c(1, 1))
 
 
 
