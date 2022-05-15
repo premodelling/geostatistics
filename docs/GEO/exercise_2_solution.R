@@ -1,18 +1,22 @@
 rm(list = ls())
 
 
-# the data
+#' Preliminaries
+
+# The data
 rb <- read.csv(file = 'data/frames/LiberiaRemoData.csv')
 
 # Scaling to km (optional)
 rb[, c('utm_x', 'utm_y')] <- rb[, c('utm_x', 'utm_y')] / 1000
 rb$logit <- log((rb$npos + 0.5) / (rb$ntest - rb$npos + 0.5))
 
-### POINT 1
-### Standard linear model
+
+
+#' Question 1
+
+# Standard linear model
 lm.fit <- lm(logit ~ log(elevation), data = rb)
 
-library(sf)
 liberia.adm0 <- st_read('../Data/Liberia spatial data/LBR_adm/LBR_adm0.shp')
 liberia.adm0 <- st_transform(liberia.adm0, crs = 32629)
 
@@ -46,7 +50,11 @@ r.pred.lm <- rasterFromXYZ(cbind(liberia.grid, pred.lm))
 plot(r.pred.lm)
 
 
-#### POINT 2
+
+
+
+#' Question 2
+
 ### Linear geostatistical model
 spat.corr.diagnostic(logit ~ 1,
                      data = rb,
@@ -68,7 +76,11 @@ fit.mle <- linear.model.MLE(logit ~ 1,
 summary(fit.mle, log.cov.pars = FALSE)
 
 
-### POINT 3
+
+
+
+#' Question 3
+
 pred.mle.lm <-
   spatial.pred.linear.MLE(fit.mle, grid.pred = liberia.grid,
                           standard.errors = TRUE,
@@ -79,9 +91,13 @@ plot(pred.mle.lm, 'prevalence', 'predictions')
 plot(pred.mle.lm, 'prevalence', 'standard.errors')
 plot(pred.mle.lm, summary = 'exceedance.prob')
 
-### POINT 4
-#### Introducing elevation
 
+
+
+
+#' Question 4
+
+# Introducing elevation
 fit.mle.elev <- linear.model.MLE(logit ~ log(elevation),
                                  coords = ~utm_x + utm_y,
                                  kappa = 0.5,
@@ -101,7 +117,12 @@ pred.mle.lm.elev <-
 plot(pred.mle.lm.elev, 'prevalence', 'predictions')
 plot(pred.mle.lm.elev, summary = 'exceedance.prob')
 
-### POINT 5 
+
+
+
+
+#' Question 5 
+
 ### Binomial geostatistical model
 c.mcmc <- control.mcmc.MCML(n.sim = 10000,
                             burnin = 2000,
