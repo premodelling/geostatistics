@@ -1,7 +1,8 @@
 rm(list = ls())
 
-
 source(file = 'docs/GEO/AreaGrid.R')
+
+
 
 
 #' Preliminaries
@@ -12,6 +13,8 @@ rb <- read.csv(file = 'data/frames/LiberiaRemoData.csv')
 # Scaling to km (optional)
 rb[, c('utm_x', 'utm_y')] <- rb[, c('utm_x', 'utm_y')] / 1000
 rb$logit <- log((rb$npos + 0.5) / (rb$ntest - rb$npos + 0.5))
+
+
 
 
 
@@ -63,16 +66,12 @@ plot(r.pred.lm)
 
 #' Question 2
 
-### Linear geostatistical model
-spat.corr.diagnostic(logit ~ 1,
-                     data = rb,
-                     coords = ~utm_x + utm_y,
-                     likelihood = 'Gaussian',
-                     lse.variogram = TRUE)
-
-sigma2.guess <- 0.5
-phi.guess <- 107
-tau2.guess <- 0.17
+# Linear geostatistical model
+initial.values <- spat.corr.diagnostic(logit ~ 1, data = rb, coords = ~ utm_x + utm_y,
+                                       likelihood = 'Gaussian', lse.variogram = TRUE)
+sigma2.guess <- initial.values$lse.variogram['sigma^2']
+phi.guess <- initial.values$lse.variogram['phi']
+tau2.guess <- initial.values$lse.variogram['tau^2']
 
 
 fit.mle <- linear.model.MLE(logit ~ 1,
