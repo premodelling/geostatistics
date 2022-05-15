@@ -109,7 +109,7 @@ plot(pred.mle.lm, summary = 'exceedance.prob')
 
 # Introducing elevation
 fit.mle.elev <- linear.model.MLE(logit ~ log(elevation),
-                                 coords = ~utm_x + utm_y,
+                                 coords = ~ utm_x + utm_y,
                                  kappa = 0.5,
                                  start.cov.pars = c(phi.guess, tau2.guess / sigma2.guess),
                                  data = rb, method = 'nlminb')
