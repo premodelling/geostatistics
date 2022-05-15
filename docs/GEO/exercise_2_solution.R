@@ -1,6 +1,9 @@
 rm(list = ls())
 
 
+source(file = 'docs/GEO/AreaGrid.R')
+
+
 #' Preliminaries
 
 # The data
@@ -14,39 +17,43 @@ rb$logit <- log((rb$npos + 0.5) / (rb$ntest - rb$npos + 0.5))
 
 #' Question 1
 
+
 # Standard linear model
 lm.fit <- lm(logit ~ log(elevation), data = rb)
 
-liberia.adm0 <- st_read('../Data/Liberia spatial data/LBR_adm/LBR_adm0.shp')
+
+# Create prediction points; the centres of 2 km by 2 km cells
+liberia.adm0 <- st_read(dsn = 'data/shapes/liberia/LBR_adm/LBR_adm0.shp')
 liberia.adm0 <- st_transform(liberia.adm0, crs = 32629)
+liberia.grid <- BasicAreaGrid(area = liberia.adm0)
 
-liberia.grid <- st_make_grid(liberia.adm0,
-                             cellsize = 2000,
-                             what = 'centers')
 
-liberia.inout <- st_intersects(liberia.grid,
-                               liberia.adm0,
-                               sparse = FALSE)
-liberia.grid <- liberia.grid[liberia.inout]
-liberia.grid <- st_coordinates(liberia.grid) / 1000
+# Elevations
+elevation <- raster(x = 'data/shapes/liberia/LBR_alt/LBR_alt.gri')
+elevation <- projectRaster(elevation, crs = CRS(projargs = '+init=epsg:32629'))
+tm_shape(elevation) +
+  tm_layout(main.title = 'Liberia', frame = FALSE) +
+  tm_raster()
 
-elevation <- raster('Liberia spatial data/LBR_alt/LBR_alt.gri')
-elevation <- projectRaster(elevation, crs = CRS('+init=epsg:32629'))
-elevation.pred <- extract(elevation, liberia.grid * 1000)
 
-ind.na <- which(is.na(elevation.pred))
-liberia.grid <- liberia.grid[-ind.na,]
-elevation.pred <- elevation.pred[-ind.na]
+# Elevation values at grid points
+elevation.pred <- raster::extract(elevation, liberia.grid)
+
+
+# Real elevation values only
+isnan <- which(is.na(elevation.pred))
+liberia.grid <- liberia.grid[-isnan,]
+elevation.pred <- elevation.pred[-isnan]
 predictors.rb <- data.frame(elevation = elevation.pred)
 
-# From the empirical logit model
-# predictions of prevalence can be obtained by using the anti-logit 
-# (i.e. the inverse function of the logit)
-# f(x) = exp(x)/(1+exp(x)) = 1/(1+exp(-x))
+
+# From the empirical logit model predictions of prevalence can be obtained by using the
+# anti-logit, i.e., the inverse function of the logit.
+#
+#   f(x) = exp(x)/(1 + exp(x)) = 1/(1 + exp(-x))
+#
 pred.lm <- 1 / (1 + exp(-predict(lm.fit, newdata = predictors.rb)))
-
 r.pred.lm <- rasterFromXYZ(cbind(liberia.grid, pred.lm))
-
 plot(r.pred.lm)
 
 
