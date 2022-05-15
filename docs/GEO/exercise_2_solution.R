@@ -91,7 +91,7 @@ summary(fit.mle, log.cov.pars = FALSE)
 # In relation to the model of Question 2 (a) nodule prevalence predictions across Liberia, and (b) the
 # exceedance probability graph w.r.t. a 20% threshold
 pred.mle.lm <- spatial.pred.linear.MLE(fit.mle,
-                                       grid.pred = st_coordinates(liberia.grid),
+                                       grid.pred = liberia.grid,
                                        standard.errors = TRUE,
                                        scale.predictions = 'prevalence',
                                        n.sim.prev = 1000,
