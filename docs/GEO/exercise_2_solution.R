@@ -29,7 +29,7 @@ lm.fit <- lm(logit ~ log(elevation), data = rb)
 # Create prediction points; the centres of 2 km by 2 km cells
 liberia.adm0 <- st_read(dsn = 'data/shapes/liberia/LBR_adm/LBR_adm0.shp')
 liberia.adm0 <- st_transform(liberia.adm0, crs = 32629)
-liberia.grid <- BasicAreaGrid(area = liberia.adm0)
+liberia.grid <- AreaGrid(area = liberia.adm0)
 
 
 # Elevations
