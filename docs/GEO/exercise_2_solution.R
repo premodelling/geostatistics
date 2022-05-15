@@ -11,8 +11,7 @@ source(file = 'docs/GEO/AreaGrid.R')
 # The data
 rb <- read.csv(file = 'data/frames/LiberiaRemoData.csv')
 
-# Scaling to km (optional)
-rb[, c('utm_x', 'utm_y')] <- rb[, c('utm_x', 'utm_y')] / 1000
+
 rb$logit <- log((rb$npos + 0.5) / (rb$ntest - rb$npos + 0.5))
 
 
@@ -132,12 +131,25 @@ plot(pred.mle.lm.elev, summary = 'exceedance.prob')
 #' Question 5 
 
 # Binomial geostatistical model
+
+# ... MCMC settings
 c.mcmc <- control.mcmc.MCML(n.sim = 10000,
                             burnin = 2000,
                             thin = 8)
 
+# ... initial values of parameters c(beta, sigmasqr, phi, tausqr)
+
+spat.corr.diagnostic(npos ~ log(elevation),
+                     units.m = ~ ntest,
+                     data = rb,
+                     coords = ~ I(utm_x/1000) + I(utm_y/1000),
+                     likelihood = 'Binomial',
+                     lse.variogram = TRUE)
+
 glm.fit <- glm(cbind(npos, ntest - npos) ~ log(elevation), data = rb, family = binomial)
 par0 <- c(coef(glm.fit), 0.2, 32)
+
+
 fit.bin.elev <- binomial.logistic.MCML(npos ~ log(elevation),
                                        units.m = ~ntest,
                                        coords = ~utm_x + utm_y,
