@@ -129,8 +129,7 @@ plot(pred.mle.lm.elev, summary = 'exceedance.prob')
 
 
 #' Question 5 
-
-# Binomial geostatistical model
+#' Binomial geostatistical model: Excluding nugget
 
 # ... MCMC settings
 c.mcmc <- control.mcmc.MCML(n.sim = 10000,
@@ -159,45 +158,75 @@ fit.bin.elev <- binomial.logistic.MCML(npos ~ log(elevation),
                                        kappa = 0.5, control.mcmc = c.mcmc,
                                        fixed.rel.nugget = 0,
                                        par0 = par0,
-                                       start.cov.pars = 32,
+                                       start.cov.pars = initial.values.binomial$lse.variogram['phi'],
                                        data = rb, method = 'nlminb')
 
 
-pred.mle.bin.elev <-
-  spatial.pred.binomial.MCML(fit.bin.elev, grid.pred = liberia.grid,
-                             control.mcmc = c.mcmc,
-                             predictors = predictors.rb,
-                             scale.predictions = 'prevalence',
-                             thresholds = 0.2,
-                             scale.thresholds = 'prevalence')
+# ... hence, predictions
+pred.mle.bin.elev <- spatial.pred.binomial.MCML(fit.bin.elev,
+                                                grid.pred = liberia.grid,
+                                                control.mcmc = c.mcmc,
+                                                predictors = predictors.rb,
+                                                scale.predictions = 'prevalence',
+                                                thresholds = 0.2,
+                                                scale.thresholds = 'prevalence')
+
+
+# ... comparing with linear model predictions
 par(mfrow = c(1, 2))
 plot(pred.mle.lm.elev$prevalence$predictions,
      pred.mle.bin.elev$prevalence$predictions,
      xlab = 'Linear model (empirical logit)',
      ylab = 'Binomial model', pch = 20)
-abline(0, 1, col = 2, lwd = 2)
+abline(a = 0, b = 1, col = 2, lwd = 2)
 
 plot(pred.mle.lm.elev$exceedance.prob,
      pred.mle.bin.elev$exceedance.prob,
      xlab = 'Linear model (empirical logit)',
      ylab = 'Binomial model', pch = 20)
-abline(0, 1, col = 2, lwd = 2)
+abline(a = 0, b = 1, col = 2, lwd = 2)
 
+
+
+
+
+
+
+#' Question 5 Alternative
+#' Binomial geostatistical model: Including nugget
+
+# ... MCMC settings
 c.mcmc <- control.mcmc.MCML(n.sim = 10000,
                             burnin = 2000,
                             thin = 8)
 
-# Including the nugget
+
+# ... initial values of parameters c(beta, sigmasqr, phi, tausqr)
+initial.values.binomial <- spat.corr.diagnostic(
+  npos ~ log(elevation), units.m = ~ ntest, data = rb,
+  coords = ~ I(utm_x/1000) + I(utm_y/1000), likelihood = 'Binomial', lse.variogram = TRUE)
+
 glm.fit <- glm(cbind(npos, ntest - npos) ~ log(elevation), data = rb, family = binomial)
-par0 <- c(coef(glm.fit), 1, 32, 1)
+
+par0 <- c(coef(glm.fit),
+          initial.values.binomial$lse.variogram['sigma^2'],
+          initial.values.binomial$lse.variogram['phi'],
+          initial.values.binomial$lse.variogram['tau^2'])
+
+
+# ... binomial geostatistical model
+# ... herein,  a nugget effect is included
 fit.bin.elev <- binomial.logistic.MCML(npos ~ log(elevation),
                                        units.m = ~ntest,
                                        coords = ~utm_x + utm_y,
                                        kappa = 0.5, control.mcmc = c.mcmc,
                                        par0 = par0,
-                                       start.cov.pars = c(32, 1),
+                                       start.cov.pars = c(initial.values.binomial$lse.variogram['phi'],
+                                                          initial.values.binomial$lse.variogram['tau^2']),
                                        data = rb, method = 'nlminb')
 
+
+# ... hence, predictions
 pred.mle.bin.elev <-
   spatial.pred.binomial.MCML(fit.bin.elev, grid.pred = liberia.grid,
                              control.mcmc = c.mcmc,
@@ -206,6 +235,8 @@ pred.mle.bin.elev <-
                              thresholds = 0.2,
                              scale.thresholds = 'prevalence')
 
+
+# ... comparing with linear model predictions
 par(mfrow = c(1, 2))
 plot(pred.mle.lm.elev$prevalence$predictions,
      pred.mle.bin.elev$prevalence$predictions,
