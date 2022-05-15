@@ -220,7 +220,8 @@ par0 <- c(coef(glm.fit),
 fit.bin.elev <- binomial.logistic.MCML(npos ~ log(elevation),
                                        units.m = ~ ntest,
                                        coords = ~ I(utm_x/1000) + I(utm_y/1000),
-                                       kappa = 0.5, control.mcmc = c.mcmc,
+                                       kappa = 0.5,
+                                       control.mcmc = c.mcmc,
                                        par0 = par0,
                                        start.cov.pars = c(initial.values.binomial$lse.variogram['phi'],
                                                           initial.values.binomial$lse.variogram['tau^2']),
@@ -228,13 +229,12 @@ fit.bin.elev <- binomial.logistic.MCML(npos ~ log(elevation),
 
 
 # ... hence, predictions
-pred.mle.bin.elev <-
-  spatial.pred.binomial.MCML(fit.bin.elev, grid.pred = liberia.grid,
-                             control.mcmc = c.mcmc,
-                             predictors = predictors.rb,
-                             scale.predictions = 'prevalence',
-                             thresholds = 0.2,
-                             scale.thresholds = 'prevalence')
+pred.mle.bin.elev <- spatial.pred.binomial.MCML(fit.bin.elev, grid.pred = liberia.grid,
+                                                control.mcmc = c.mcmc,
+                                                predictors = predictors.rb,
+                                                scale.predictions = 'prevalence',
+                                                thresholds = 0.2,
+                                                scale.thresholds = 'prevalence')
 
 
 # ... comparing with linear model predictions
