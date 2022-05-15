@@ -239,14 +239,17 @@ pred.mle.bin.elev <-
 
 # ... comparing with linear model predictions
 par(mfrow = c(1, 2))
+
 plot(pred.mle.lm.elev$prevalence$predictions,
      pred.mle.bin.elev$prevalence$predictions,
      xlab = 'Linear model (empirical logit)',
      ylab = 'Binomial model', pch = 20)
-abline(0, 1, col = 2, lwd = 2)
+abline(a = 0, b = 1, col = 2, lwd = 2)
 
 plot(pred.mle.lm.elev$exceedance.prob,
      pred.mle.bin.elev$exceedance.prob,
      xlab = 'Linear model (empirical logit)',
      ylab = 'Binomial model', pch = 20)
-abline(0, 1, col = 2, lwd = 2)
+abline(a = 0, b = 1, col = 2, lwd = 2)
+
+par(mfrow = c(1, 1))
