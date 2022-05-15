@@ -11,7 +11,7 @@ source(file = 'docs/GEO/AreaGrid.R')
 # The data
 rb <- read.csv(file = 'data/frames/LiberiaRemoData.csv')
 
-
+# Empirical logit; an adjusted logit function - the logit function is logit(p) = p / (1 - p)
 rb$logit <- log((rb$npos + 0.5) / (rb$ntest - rb$npos + 0.5))
 
 
