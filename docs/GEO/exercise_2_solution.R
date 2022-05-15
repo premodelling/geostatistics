@@ -88,11 +88,14 @@ summary(fit.mle, log.cov.pars = FALSE)
 
 #' Question 3
 
-pred.mle.lm <-
-  spatial.pred.linear.MLE(fit.mle, grid.pred = liberia.grid,
-                          standard.errors = TRUE,
-                          scale.predictions = 'prevalence', n.sim.prev = 1000,
-                          thresholds = 0.2, scale.thresholds = 'prevalence')
+# In relation to the model of Question 2 (a) nodule prevalence predictions across Liberia, and (b) the
+# exceedance probability graph w.r.t. a 20% threshold
+pred.mle.lm <- spatial.pred.linear.MLE(fit.mle,
+                                       grid.pred = st_coordinates(liberia.grid),
+                                       standard.errors = TRUE,
+                                       scale.predictions = 'prevalence',
+                                       n.sim.prev = 1000,
+                                       thresholds = 0.2, scale.thresholds = 'prevalence')
 
 plot(pred.mle.lm, 'prevalence', 'predictions')
 plot(pred.mle.lm, 'prevalence', 'standard.errors')
@@ -111,15 +114,13 @@ fit.mle.elev <- linear.model.MLE(logit ~ log(elevation),
                                  start.cov.pars = c(phi.guess, tau2.guess / sigma2.guess),
                                  data = rb, method = 'nlminb')
 
-pred.mle.lm.elev <-
-  spatial.pred.linear.MLE(fit.mle.elev, grid.pred = liberia.grid,
-                          predictors = predictors.rb,
-                          scale.predictions = 'prevalence',
-                          thresholds = 0.2, n.sim.prev = 1000,
-                          scale.thresholds = 'prevalence')
-
-# thresholds=0.2 allows you to compute the predictive probability that prevalence is above 0.2 
-# this is also known as the exceedance probability of a 0.2 prevalence threshold
+# The term thresholds = 0.2 allows you to compute the predictive probability that prevalence is above 0.2;
+# this is also known as the exceedance probability of a 0.2 prevalence threshold.
+pred.mle.lm.elev <- spatial.pred.linear.MLE(fit.mle.elev, grid.pred = liberia.grid,
+                                            predictors = predictors.rb,
+                                            scale.predictions = 'prevalence',
+                                            thresholds = 0.2, n.sim.prev = 1000,
+                                            scale.thresholds = 'prevalence')
 
 plot(pred.mle.lm.elev, 'prevalence', 'predictions')
 plot(pred.mle.lm.elev, summary = 'exceedance.prob')
@@ -130,7 +131,7 @@ plot(pred.mle.lm.elev, summary = 'exceedance.prob')
 
 #' Question 5 
 
-### Binomial geostatistical model
+# Binomial geostatistical model
 c.mcmc <- control.mcmc.MCML(n.sim = 10000,
                             burnin = 2000,
                             thin = 8)
