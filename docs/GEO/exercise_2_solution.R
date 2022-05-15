@@ -155,7 +155,7 @@ par0 <- c(coef(glm.fit),
 #     a tausqr setting wasn't required in par0
 fit.bin.elev <- binomial.logistic.MCML(npos ~ log(elevation),
                                        units.m = ~ntest,
-                                       coords = ~utm_x + utm_y,
+                                       coords = ~ I(utm_x/1000) + I(utm_y/1000),
                                        kappa = 0.5, control.mcmc = c.mcmc,
                                        fixed.rel.nugget = 0,
                                        par0 = par0,
