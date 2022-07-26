@@ -33,9 +33,3 @@ plot(sf::st_geometry(china), add = TRUE)
 
 # ?the use of [0] to keep only the geometry column
 plot(asia[0], add = TRUE)
-
-
-
-
-
-
