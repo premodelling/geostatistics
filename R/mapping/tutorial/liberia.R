@@ -39,7 +39,7 @@ liberia.adm0 <- st_transform(liberia.adm0, crs = utm)
 # the border outline of Liberia
 map0 <- tm_shape(liberia.adm0) +
   tm_layout(main.title = 'Liberia', frame = FALSE) +
-  tm_borders(lwd = 3)
+  tm_borders(lwd = 0.5)
 map0
 
 
@@ -56,12 +56,17 @@ Map.with.points <- map0 +
              border.col = 'white',
              border.alpha = 0,
              style = 'fixed',
-             breaks = seq(0, 0.4, 0.05),
+             breaks = seq(0, 0.4, 0.1),
              palette = '-RdYlBu',
-             title.size = 'Prevalence',
+             title.size = 'Onchocerciasis Prevalence',
              scale = 1,
-             title.col = 'Prevalence')
-Map.with.points
+             title.col = '')
+
+
+# Positioning the legend,and adding a compass.
+Map.with.points +
+  tm_layout(legend.position = c('left', 'bottom')) +
+  tm_compass(type = '8star', position = c('right', 'top'))
 
 
 # Adding a compass, and a scale bar.  Positioning the legend.
