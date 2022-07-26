@@ -7,6 +7,11 @@
 rm(list = ls())
 
 
+# functions
+source(file = 'R/mapping/encoding/UTM.R')
+source(file = 'R/mapping/encoding/Geocoding.R')
+
+
 # data
 data(world)
 class(world)
@@ -41,6 +46,8 @@ plot(world['pop'], main = 'population', reset = FALSE)
 plot(asia, add = TRUE, col = 'red')
 
 
-
-
-
+# setting the reference coordinates
+degrees <- AddressGeocoding(address = 'Dodoma, Tanzania')
+degrees
+utm <- UTM(longitude = degrees$longitude, latitude = degrees$latitude)
+utm
