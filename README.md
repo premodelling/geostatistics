@@ -3,7 +3,6 @@
 **Geostatistics**
 
 <br>
-<br>
 
 ### Notes
 
