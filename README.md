@@ -22,6 +22,7 @@ Books:
 Geography:
 * [Projections](https://proj-tmp.readthedocs.io/en/docs/operations/projections/index.html)
 * [Geographic vs. Co&#246;rdinated Reference Systems](https://www.earthdatascience.org/courses/use-data-open-source-python/intro-vector-data-python/spatial-data-vector-shapefiles/geographic-vs-projected-coordinate-reference-systems-python/)  
+* [``tmap`` Reference](https://r-tmap.github.io/tmap/reference/index.html)
 * https://www.diva-gis.org
 * https://epsg.io
 * https://hub.arcgis.com/datasets/esri::world-utm-grid/explore?location=-0.000000%2C0.000000%2C1.92
