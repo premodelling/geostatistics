@@ -26,7 +26,7 @@ InstallPackagesOfficial <- function (){
     library(x, character.only = TRUE)
     if (x == 'rmarkdown') {library(tinytex)}
   }
-  lapply(packages[!(packages %in% c('tidyverse', 'healthcareai', 'equatiomatic', 'tseries'))], .activate)
+  lapply(packages[!(packages %in% c('tidyverse', 'healthcareai', 'equatiomatic', 'tseries', 'terra', 'raster'))], .activate)
 
   # Special Case
   if ('tidyverse' %in% packages) {

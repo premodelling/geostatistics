@@ -182,10 +182,10 @@ plot(r.above4, main = 'Chance of lead quantities exc. 4')
 
 # ... priors
 log.prior.sigma2.galicia <- function(sigma2) {
-  dunif(sigma2, min = 0,max = , log = TRUE)
+  dunif(sigma2, min = 0, max = 10, log = TRUE)
 }
 log.prior.phi.galicia <- function(phi) {
-  dunif(phi, min = 0,max = 50, log = TRUE)
+  dunif(phi, min = 0, max = 50, log = TRUE)
 }
 cp <- control.prior(beta.mean = 0, beta.covar = 10^10,
                     log.prior.sigma2 = log.prior.sigma2.galicia,
