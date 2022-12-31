@@ -32,14 +32,16 @@ tmap::tm_shape(togo) +
 
 
 # elevations
-elevations <- terra::rast('data/elevation/wc2.1_30s_elev.tif')
+elevations <- geodata::elevation_30s(country = 'TGO', path = tempdir())
 class(elevations)
 cat(terra::crs(elevations))
 
 
 # elevations within boundary
 focus <- terra::mask(elevations, terra::vect(togo))
-rm(elevations)
+tm_shape(focus) +
+  tm_layout(main.title = 'Togo', frame = FALSE) +
+  tm_raster(title = 'Elevation')
 
 
 # directory
