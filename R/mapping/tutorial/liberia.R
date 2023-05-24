@@ -27,6 +27,8 @@ frame$prev <- frame$npos / frame$ntest
 # setting the reference coordinates
 degrees <- AddressGeocoding(address = 'Monrovia, Liberia')
 utm <- UTM(longitude = degrees$longitude, latitude = degrees$latitude)
+
+# as a simple feature
 liberia <- st_as_sf(frame, coords = c('utm_x', 'utm_y'))
 st_crs(liberia) <- utm
 
