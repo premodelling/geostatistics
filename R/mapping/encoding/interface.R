@@ -7,7 +7,7 @@ source(file = 'R/mapping/encoding/Geocoding.R')
 source(file = 'R/mapping/encoding/UTM.R')
 
 # addresses of places
-address <- c('Auckland, New Zealand', 'London, United Kingdom', 'Yaounde, Cameroon', 'Monrovia, Liberia')
+address <- c('Auckland, New Zealand', 'Magway, Myanmar', 'London, United Kingdom', 'Yaounde, Cameroon', 'Monrovia, Liberia')
 
 # get their longitude & latitude values via a geocoding service
 latest <- AddressGeocoding(address = address)
