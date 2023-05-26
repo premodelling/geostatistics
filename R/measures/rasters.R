@@ -4,9 +4,8 @@
 # Created on: 28/05/2022
 
 
-
 # Example: River Blindness Experiment
-drc <- st_read(dsn = 'data/shapes/drc/COD_adm/COD_adm0.shp')
+drc <- st_read(dsn = file.path(getwd(), 'data', 'shapes', 'drc', 'COD_adm', 'COD_adm0.shp'))
 class(drc)
 st_crs(drc)
 drc <- st_transform(drc, crs = 'EPSG:3857')
@@ -16,12 +15,12 @@ tm_shape(drc) +
   tm_layout(frame = FALSE) +
   tm_borders()
 
-instances <- read.csv(file = 'data/frames/experiment/instances.csv')
+instances <- read.csv(file = file.path(getwd(), 'data', 'frames', 'experiment', 'instances.csv'))
 instances <- sf::st_as_sf(instances, coords = c('x', 'y'), crs = 'EPSG:3857')
 instances$x <- as.numeric(st_coordinates(instances)[, 1])
 instances$y <- as.numeric(st_coordinates(instances)[, 2])
 
-sample <- read.csv(file = 'data/frames/experiment/features.csv')
+sample <- read.csv(file = file.path(getwd(), 'data', 'frames', 'experiment', 'features.csv'))
 sample <- sample %>%
   dplyr::select(features.index, x, y, AnnualPrecip)
 features <- sf::st_as_sf(sample, coords = c('x', 'y'), crs = 'EPSG:3857')
