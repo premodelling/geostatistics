@@ -19,9 +19,16 @@ source(file = file.path(getwd(), 'R', 'blindness', 'Grids.R'))
 #' Data
 #'
 
-# reading-in the Liberia data set
+# reading-in the Liberia river blindness data set
 frame <- read.csv(file = file.path(getwd(), 'data', 'frames', 'LiberiaRemoData.csv'))
+
+# prevalence
 frame$prev <- frame$npos / frame$ntest
+
+# empirical logit
+frame$nneg <- frame$ntest - frame$npos
+frame$EL <- log( (frame$npos + 0.5)/(frame$nneg + 0.5) )
+
 
 
 
