@@ -3,8 +3,8 @@
 # Created by: greyhypotheses
 # Created on: 30/04/2022
 
-source(file = 'R/mapping/encoding/Geocoding.R')
-source(file = 'R/mapping/encoding/UTM.R')
+source(file = file.path(getwd(), 'R', 'algorithms/encoding/Geocoding.R'))
+source(file = file.path(getwd(), 'R', 'algorithms/encoding/UTM.R'))
 
 # addresses of places
 address <- c('Auckland, New Zealand', 'Magway, Myanmar', 'London, United Kingdom', 'Yaounde, Cameroon', 'Monrovia, Liberia')
