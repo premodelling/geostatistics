@@ -4,6 +4,12 @@
 # Created on: 30/06/2022
 
 
+#' Link
+#'
+#' @description Directory creator
+#'
+#' @param path: A directory path string
+#'
 LinkDirectories <- function (path) {
 
   if (!dir.exists(paths = path)) {
