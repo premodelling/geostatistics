@@ -18,6 +18,6 @@ Projected <- function (blob) {
     tm_layout(frame = FALSE, inner.margins = c(0.1, 0.1, 0.1, 0.1)) +
     tm_dots(size = 0.65, alpha = 0.35, border.lwd = 0)
 
-  return(list(diagram = diagram, properties = properties))
+  return(list(diagram = diagram, properties = properties, blob = projected))
 
 }
