@@ -4,42 +4,6 @@
 # Created on: 28/05/2022
 
 
-# Example: Cycle Hire
-cycle_hire_osm <- spData::cycle_hire_osm
-class(cycle_hire_osm)
-
-properties <- sf::st_crs(cycle_hire_osm)
-properties$input
-
-textstr <- paste0('Geographic Coo',  "rdinate System $\\; \\; \\; \\; \\;$")
-
-tm_shape(cycle_hire_osm) +
-  tm_layout(main.title = 'Cycle Hire Points', main.title.position = 0.115,
-            frame = FALSE, inner.margins = c(0.1, 0.1, 0.1, 0.1)) +
-  tm_dots(size = 1.15, alpha = 0.35, border.lwd = 0) +
-  tm_credits(text = TeX(paste0(textstr, {properties$input}), output = 'expression'))
-
-cycle_hire_osm_projected <- st_transform(cycle_hire_osm, crs = 'EPSG:27700')
-class(cycle_hire_osm_projected)
-sf::st_crs(cycle_hire_osm_projected)
-tm_shape(cycle_hire_osm_projected) +
-  tm_layout(main.title = 'Cycle Points', frame = FALSE) +
-  tm_dots()
-
-
-
-
-raster_template <- rast(ext(cycle_hire_osm_projected), resolution = 500,
-                        crs = st_crs(cycle_hire_osm_projected)$wkt)
-class(raster_template)
-terra::crs(raster_template) %>% cat()
-
-counts <- rasterize(vect(cycle_hire_osm_projected), raster_template, fun = 'length')
-class(counts)
-tm_shape(counts) +
-  tm_layout(main.title = 'Cycle Points', frame = FALSE) +
-  tm_raster(title = '\nCapacity')
-
 
 # Example: River Blindness Experiment
 drc <- st_read(dsn = 'data/shapes/drc/COD_adm/COD_adm0.shp')
