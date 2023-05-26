@@ -7,17 +7,13 @@
 
 rm(list = ls())
 
-
-
 # functions
-source(file = 'R/mapping/encoding/UTM.R')
-source(file = 'R/mapping/encoding/Geocoding.R')
-
+source(file = '../mapping/encoding/UTM.R')
+source(file = '../mapping/encoding/Geocoding.R')
 
 # reading-in the Liberia data set
-frame <- read.csv(file = 'data/frames/LiberiaRemoData.csv')
+frame <- read.csv(file = '../../data/frames/LiberiaRemoData.csv')
 frame$prev <- frame$npos / frame$ntest
-
 
 
 
@@ -32,11 +28,9 @@ utm <- UTM(longitude = degrees$longitude, latitude = degrees$latitude)
 liberia <- st_as_sf(frame, coords = c('utm_x', 'utm_y'))
 st_crs(liberia) <- utm
 
-
 # reading-in the shape file of Liberia's country border
 liberia.adm0 <- st_read(dsn = 'data/shapes/Liberia/LBR_adm/LBR_adm0.shp')
 liberia.adm0 <- st_transform(liberia.adm0, crs = utm)
-
 
 # the border outline of Liberia
 map0 <- tm_shape(liberia.adm0) +
@@ -44,12 +38,10 @@ map0 <- tm_shape(liberia.adm0) +
   tm_borders(lwd = 0.5)
 map0
 
-
 # preview what happens w.r.t. overlaying event points as dots; points encoded by <liberia$geometry>
 map0 +
   tm_shape(liberia) +
   tm_dots(size = 0.5)
-
 
 # adding a layer of event points whereby the points are bubbles
 Map.with.points <- map0 +
@@ -64,12 +56,10 @@ Map.with.points <- map0 +
              scale = 1,
              title.col = '')
 
-
 # Positioning the legend,and adding a compass.
 Map.with.points +
   tm_layout(legend.position = c('left', 'bottom')) +
   tm_compass(type = '8star', position = c('right', 'top'))
-
 
 # Adding a compass, and a scale bar.  Positioning the legend.
 grounds <- Map.with.points +
@@ -80,10 +70,8 @@ grounds
 
 
 
-
 #' Interactive
 #'
-
 tmap_mode(mode = 'view')
 Map.with.points +
   tm_compass(type = '8star', position = c('right', 'top')) +
@@ -93,16 +81,13 @@ tmap_mode(mode = 'plot')
 
 
 
-
 #' Liberia's waters
 #'
-
-liberia.wl <- st_read(dsn = 'data/shapes/Liberia/LBR_wat/LBR_water_lines_dcw.shp')
+liberia.wl <- st_read(dsn = file.path(getwd(), 'data/shapes/Liberia/LBR_wat/LBR_water_lines_dcw.shp'))
 st_crs(x = liberia.wl)
 st_is_longlat(x = liberia.wl)
 liberia.wl <- st_transform(liberia.wl, crs = utm)
 st_crs(x = liberia.wl)
-
 
 grounds +
   tm_shape(liberia.wl) +
@@ -115,14 +100,12 @@ grounds +
 
 #' Liberia's elevations
 #'
-
-liberia.alt <- terra::rast('data/shapes/Liberia/LBR_alt/LBR_alt.vrt')
+liberia.alt <- terra::rast(file.path(getwd(), 'data/shapes/Liberia/LBR_alt/LBR_alt.vrt'))
 class(x = liberia.alt)
 cat(crs(liberia.alt))
 liberia.alt <- terra::project(liberia.alt, paste0('EPSG:', utm), method = 'bilinear')
 class(x = liberia.alt)
 cat(crs(liberia.alt))
-
 
 # the elevations, and the country's border
 tm_shape(liberia.alt) +
@@ -130,7 +113,6 @@ tm_shape(liberia.alt) +
   tm_raster(title = 'Elevation') +
   tm_shape(liberia.adm0) +
   tm_borders(lwd = 2)
-
 
 # the elevations within the country's border ONLY
 terra::mask(liberia.alt, terra::vect(liberia.adm0)) %>%
@@ -140,7 +122,7 @@ terra::mask(liberia.alt, terra::vect(liberia.adm0)) %>%
   tm_shape(liberia.adm0) +
   tm_borders(lwd = 2)
 
-
+# mask
 liberia.alt <- terra::mask(liberia.alt, terra::vect(liberia.adm0))
 tm_shape(liberia.alt) +
   tm_layout(main.title = 'Liberia', frame = FALSE) +
@@ -148,13 +130,11 @@ tm_shape(liberia.alt) +
   tm_shape(liberia.adm0) +
   tm_borders(lwd = 2)
 
-
 # get the elevation values
 frame$my_elevation <- terra::extract(liberia.alt, terra::vect(liberia)) %>%
   dplyr::select(!ID) %>%
   unlist() %>%
   as.numeric()
-
 
 
 
@@ -169,7 +149,6 @@ tm_shape(liberia.grid) +
   tm_dots() +
   tm_shape(liberia.adm0) +
   tm_borders(lwd = 2)
-
 
 # the grid cells within Liberia ONLY
 liberia.inside <- sf::st_intersects(liberia.grid, liberia.adm0, sparse = FALSE)
@@ -205,16 +184,14 @@ tm_shape(terrains) +
            palette = 'dodgerblue3',
            alpha = 0.35)
 
-terra::writeRaster(x = terrains, filename = 'images/liberia.tif', overwrite = TRUE, filetype = 'GTiff')
-terra::writeRaster(x = terrains, filename = 'images/liberia.sgi', overwrite = TRUE, filetype = 'SGI', datatype='INT1U')
-
+terra::writeRaster(x = terrains, filename = file.path(getwd(), 'images/liberia.tif'), overwrite = TRUE, filetype = 'GTiff')
+terra::writeRaster(x = terrains, filename = file.path(getwd(), 'images/liberia.sgi'), overwrite = TRUE, filetype = 'SGI', datatype='INT1U')
 
 
 
 #' Next administrative level
 #'
-
-liberia.adm2 <- st_read(dsn = 'data/shapes/liberia/LBR_adm/LBR_adm2.shp')
+liberia.adm2 <- st_read(dsn = file.path(getwd(), 'data/shapes/liberia/LBR_adm/LBR_adm2.shp'))
 liberia.adm2 <- st_transform(liberia.adm2, crs = utm)
 
 names.adm2 <- liberia.adm2$NAME_2
@@ -234,18 +211,3 @@ map2 <- tm_shape(liberia.adm2) +
 map2 +
   tm_layout(main.title = 'Liberia', frame = FALSE) +
   tm_fill(col = 'Mean_elevation', title = 'Mean elevation (m)')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
