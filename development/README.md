@@ -17,6 +17,35 @@ Read "Writing R Extensions" for more information.
 <br>
 <br>
 
+### Snippets
+
+About simple features ([sf](https://r-spatial.github.io/sf/index.html)) & spatial data ([sp](https://cran.r-project.org/web/packages/sp/index.html)) objects
+
+```R
+library(sp)
+
+# from an sf object to sp object
+SP <- as(world, "Spatial") 
+
+# from sp object to sf object
+SF <- st_as_sf(SP)
+```
+
+<br>
+
+About raster objects
+
+```R
+template <- terra::rast()
+
+class(template)
+terra::crs(template) %>% 
+  cat()
+```
+
+<br>
+<br>
+
 <br>
 <br>
 
