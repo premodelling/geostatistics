@@ -3,14 +3,14 @@
 # Created by: greyhypotheses
 # Created on: 26/05/2023
 
-pathstr <- file.path(getwd(), 'R', 'rasterisation')
+root <- file.path(getwd(), 'R', 'rasterisation')
 
 # create book
-bookdown::render_book(input = pathstr, output_file = 'input.pdf', output_dir = pathstr,
-                      output_yaml = file.path(pathstr, '_output.yml'))
+bookdown::render_book(input = root, output_file = 'input.pdf', output_dir = root,
+                      output_yaml = file.path(root, '_output.yml'))
 
 # clean-up
-string <- file.path(pathstr, 'index.log')
+string <- file.path(root, 'input.log')
 if (file.exists(string)) {
   base::unlink(x = string)
 }
