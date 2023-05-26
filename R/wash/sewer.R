@@ -4,7 +4,7 @@
 # Created on: 22/06/2022
 
 
-source(file = 'R/functions/Unlink.R')
+source(file = file.path(getwd(), 'R', 'functions/Unlink.R'))
 
 
 # A source example
