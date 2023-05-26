@@ -2,6 +2,8 @@
 
 **Geostatistics**
 
+Building on ``CHIC563: Geostatistics``
+
 <br>
 
 ### Notes
@@ -42,43 +44,9 @@ Tools:
   * [Layers](https://r-tmap.github.io/tmap-book/layers.html#layers) &Rarr; *polygons*, *symbols*, *lines*, *text*, *raster*, *tiles*    
 
 * [Conversions between different spatial classes in R](https://geocompr.github.io/post/2021/spatial-classes-conversion/)
-
 * [File Formats](https://geocompr.robinlovelace.net/read-write.html#file-formats)
-
 * [Journal of maps style guide](https://files.taylorandfrancis.com/TJOM-suppmaterial-quick-guide.pdf)  
-  
 * [HTML Symbols, Entities, Special Characters](https://www.toptal.com/designers/htmlarrows/)  
-  
-<br>
-<br>
-
-### Snippets
-
-```R
-library(sp)
-
-# from an sf object to sp object
-SP <- as(world, "Spatial") 
-
-# from sp object to sf object
-SF <- st_as_sf(SP)           
-```
-
-<br>
-<br>
-
-### Independent Development Environment
-
-* Edit the help file skeletons in 'man', possibly combining help files
-  for multiple functions.
-* Edit the exports in 'NAMESPACE', and add necessary imports.
-* Put any C/C++/Fortran code in 'src'.
-* If you have compiled code, add a useDynLib() directive to
-  'NAMESPACE'.
-* Run R CMD build to build the package tarball.
-* Run R CMD check to check the package tarball.
-
-Read "Writing R Extensions" for more information.
 
 <br>
 <br>

@@ -40,3 +40,4 @@ vignettes/*.pdf
 
 # IntelliJ IDEA
 .idea
+*.log

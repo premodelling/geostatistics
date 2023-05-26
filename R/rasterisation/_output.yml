@@ -1,0 +1,7 @@
+bookdown::tufte_book2:
+  includes:
+    in_header: preamble.tex
+  citation_package: natbib
+  latex_engine: xelatex
+  keep_tex: FALSE
+  toc: FALSE

@@ -1,0 +1,4 @@
+delete_merged_file: true
+book_filename: '_manuscript'
+rmd_files: ['index.Rmd']
+output_format: 'bookdown::tufte_book2'

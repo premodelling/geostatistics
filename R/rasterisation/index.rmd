@@ -1,0 +1,110 @@
+---
+title: Rasterisation
+runningheader: "Illustrating Raster Maps"
+author: notes
+date: "`r Sys.Date()`"
+documentclass: book
+bibliography: ../../bibliography/bibliography.bib
+csl: ../../bibliography/cambridge-university-press-numeric.csl
+link-citations: yes
+classoption:
+  - fleqn
+extra_dependencies:
+  - float
+site: bookdown::bookdown_site
+output:
+  bookdown::tufte_book2
+---
+
+
+
+<!--- Global Settings --->
+```{r include = FALSE}
+
+# Settings
+knitr::opts_chunk$set(echo = FALSE, comment = '')
+options(knitr.table.format = 'latex')
+options(knitr.kable.NA = '')
+
+# Invalidate cache when the tufte version changes
+library(tufte)
+knitr::opts_chunk$set(cache.extra = packageVersion(pkg = 'tufte'))
+options(htmltools.dir.version = FALSE)
+```
+
+
+```{r include = FALSE}
+library(xtable)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(stringr)
+
+library(magrittr)
+library(latex2exp)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+
+library(tmap)
+library(sf)
+
+```
+
+<!--- settings --->
+```{r exploration settings}
+pathstr <- dirname(getwd())
+```
+
+<!--- functions --->
+```{r exploration functions}
+sys.source(file = file.path(pathstr, 'rasterisation', 'Raw.R'), envir = knitr::knit_global())
+sys.source(file = file.path(pathstr, 'rasterisation', 'Projected.R'), envir = knitr::knit_global())
+sys.source(file = file.path(pathstr, 'rasterisation', 'Rasters.R'), envir = knitr::knit_global())
+```
+
+# *INTRODUCTION* {-}
+
+A brief text, program, about rasterisation for geospatial analysis, statistics, or modelling.
+
+
+# *PROJECTING*
+
+
+```{r functions}
+raw <- Raw()
+projected <- Projected(blob = raw$blob)
+```
+
+For ...
+
+## Unprojected Map
+
+This example illustrates the Open Street Map (OSM) bicycle hire data. Its Geographic Co$\ddot{o}$rdinate System is `r raw$properties$input`
+
+```{r raw, fig.pos = '!h', fig.align = 'center', out.width = '.60\\linewidth', fig.cap = "An illustration of bicycle hiring points across London, United Kingdom.  It is an unprojected map, the geographic coordinate system is ..."}
+raw$diagram
+```
+
+
+\clearpage
+
+## Projected Map
+
+The projected form has co$\ddot{o}$rdinate reference system `r projected$properties$input`
+
+<!--- diagram --->
+```{r projected, fig.pos = '!h', fig.align = 'center', out.width = '.60\\linewidth', fig.cap = "An illustration of bicycle hiring points across London, United Kingdom; projected."}
+projected$diagram
+```
+
+\vspace{20pt}
+
+## Rasterisation
+
+```{r rasters, fig.pos = '!h', fig.align = 'center', out.width = '.60\\linewidth', fig.cap = "Rasterisation \\href{https://r.geocompx.org/raster-vector.html\\#rasterization}{source}."}
+Rasters(blob = projected$blob)
+```
+
+
+

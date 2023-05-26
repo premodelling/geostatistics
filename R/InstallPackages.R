@@ -21,26 +21,11 @@ InstallPackagesOfficial <- function (){
   }
   lapply(packages, .install)
 
-  # Activate
-  .activate <- function (x){
-    library(x, character.only = TRUE)
-    if (x == 'rmarkdown') {library(tinytex)}
-  }
-  lapply(packages[!(packages %in% c('tidyverse', 'healthcareai', 'equatiomatic', 'tseries', 'terra', 'raster'))], .activate)
-
-  # Special Case
-  if ('tidyverse' %in% packages) {
-    lapply(X = c('magrittr', 'dplyr', 'tibble', 'ggplot2', 'stringr', 'lubridate'), .activate)
-  }
-
-  # Active libraries
-  sessionInfo()
-
 }
 
 
 #' Packages in development
-InstallPackagesExtraeous <- function () {
+InstallPackagesExtraneous <- function () {
 
   packages <- 'spDataLarge'
   repositories <- 'https://nowosad.r-universe.dev'
@@ -49,15 +34,8 @@ InstallPackagesExtraeous <- function () {
   .install <- function(x, y){
     if (!require(x, character.only = TRUE)) {
       install.packages(x, repos = y, dependencies = TRUE)
-      if (x == 'rmarkdown') {tinytex::install_tinytex()}
     }
   }
   mapply(FUN = .install, x = packages, y = repositories)
-
-  # Activate
-  .activate <- function (x){
-    library(x, character.only = TRUE)
-  }
-  lapply(packages, .activate)
 
 }
