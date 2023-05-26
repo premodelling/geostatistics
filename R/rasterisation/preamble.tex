@@ -1,0 +1,44 @@
+%! Author = greyhypotheses
+%! Date = 26/05/2023
+
+
+% Packages
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage[nameinlink, capitalize]{cleveref}
+\usepackage{makecell}
+\usepackage{color}
+
+
+% Indentations
+\setlength\mathindent{25pt}
+
+
+% Settings
+\hypersetup{colorlinks=true,urlcolor=olive,linkcolor=brown,citecolor=orange}
+
+
+% Colours
+\definecolor{darkgrey}{HTML}{4a4a4a}
+\definecolor{duskyblue}{HTML}{6C779C}
+\definecolor{wine}{rgb}{.44,.18,.21}
+\definecolor{darkolive}{HTML}{546A2F}
+
+
+% Setting the format of the section titles: SMALL CAPS
+\titleformat*{\section}{\scshape}
+
+
+% Spacing: left, before, after
+\titlespacing{\chapter}{0pt}{50pt}{35pt}
+\titlespacing{\section}{0pt}{30pt}{10pt}
+\titlespacing{\subsection}{0pt}{20pt}{*1}
+
+
+% Table of Contents
+% \renewcommand{\contentsname}{\Huge\scshape{ }}
+% \titlecontents{section}[1.5em]{\small\scshape}{\thecontentslabel. }{}{}[]
+
+
+% References
+\creflabelformat{equation}{#2\textup{#1}#3}
