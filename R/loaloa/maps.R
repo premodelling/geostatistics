@@ -5,8 +5,8 @@
 
 
 # functions
-source(file = 'R/mapping/encoding/UTM.R')
-source(file = 'R/mapping/encoding/Geocoding.R')
+source(file = file.path(getwd(), 'R', 'algorithms', 'encoding', 'UTM.R'))
+source(file = file.path(getwd(), 'R', 'algorithms', 'encoding', 'Geocoding.R'))
 
 
 # The loaloa data set
