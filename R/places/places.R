@@ -45,7 +45,7 @@ tm_shape(focus) +
 
 
 # directory
-external <- file.path(getwd(), 'warehouse', 'maps')
+external <- file.path(getwd(), file.path(getwd(), 'warehouse', 'maps'))
 if (dir.exists(external)) {
   base::unlink(x = external, recursive = TRUE)
 }
