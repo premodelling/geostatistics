@@ -8,8 +8,8 @@
 rm(list = ls())
 
 # functions
-source(file = '../mapping/encoding/UTM.R')
-source(file = '../mapping/encoding/Geocoding.R')
+source(file = file.path(getwd(), 'R', 'algorithms', 'encoding', 'UTM.R'))
+source(file = file.path(getwd(), 'R', 'algorithms', 'encoding', 'Geocoding.R'))
 
 # reading-in the Liberia data set
 frame <- read.csv(file = '../../data/frames/LiberiaRemoData.csv')
