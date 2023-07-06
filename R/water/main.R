@@ -37,8 +37,10 @@ X <- parallel::clusterMap(clusters, fun = Segments, catchments,
 parallel::stopCluster(clusters)
 rm(clusters, cores)
 
-X %>%
+collection <- X %>%
   purrr::reduce(full_join, by='station_id')
+
+
 
 
 #' Discharges
