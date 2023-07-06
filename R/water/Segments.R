@@ -52,6 +52,7 @@ Segments <- function () {
 
   # ...
   T <- st_intersects(frame, diagram, sparse = FALSE)
+  frame$thames <- as.integer(T)
 
 
 
