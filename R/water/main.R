@@ -40,7 +40,7 @@ rm(clusters, cores)
 collection <- X %>%
   purrr::reduce(full_join, by='station_id')
 
-dplyr::left_join(x = frame, y = collection, by = 'station_id')
+computations <- dplyr::left_join(x = frame, y = collection, by = 'station_id')
 
 
 #' Discharges
