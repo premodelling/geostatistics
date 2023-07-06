@@ -27,6 +27,10 @@ Segments <- function (frame, catchment, utm) {
   frame$place <- as.integer(T)
   colnames(frame)[colnames(frame) == 'place'] <- catchment
 
+  reduced <- frame[, c('station_id', catchment)]
+
+  return (sf::st_drop_geometry(reduced))
+
 }
 
 
