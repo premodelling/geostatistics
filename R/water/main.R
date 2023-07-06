@@ -27,6 +27,17 @@ frame <- SegmentsData(utm = utm)
 catchments <- c('anglian', 'humber', 'thames')
 
 
+# in parallel
+source(file = file.path(getwd(), 'R', 'water', 'Segments.R'))
+cores <- parallel::detectCores() - 2
+doParallel::registerDoParallel(cores = cores)
+clusters <- parallel::makeCluster(cores)
+X <- parallel::clusterMap(clusters, fun = Segments, catchments,
+                     MoreArgs = list(frame = frame, utm = utm))
+parallel::stopCluster(clusters)
+rm(clusters, cores)
+
+
 
 #' Discharges
 #'
