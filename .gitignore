@@ -41,3 +41,7 @@ vignettes/*.pdf
 # IntelliJ IDEA
 .idea
 *.log
+
+# Services
+services.yaml
+

@@ -14,7 +14,7 @@ loaloa$logit <- log((loaloa$NO_INF+0.5)/(loaloa$NO_EXAM-loaloa$NO_INF+0.5))
 lm.fit <- lm(logit ~ ELEVATION + I(ELEVATION^2), data = loaloa)
 summary(lm.fit)
 
-# settig coordinates
+# setting coordinates
 coords <- sp::SpatialPoints(loaloa[,c('LONGITUDE', 'LATITUDE')], CRS(projargs = '+init=epsg:4236'))
 coords.utm <- sp::spTransform(coords, CRS(projargs = '+init=epsg:32632'))
 loaloa$utm_x <- coordinates(coords.utm)[,1]/1000
