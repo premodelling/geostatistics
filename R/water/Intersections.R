@@ -30,7 +30,7 @@ Intersections <- function (district, frame, utm) {
   colnames(frame)[colnames(frame) == 'place'] <- district
 
 
-  # Focusing on firld <station_id>, and the district field, only.
+  # Focusing on field <station_id>, and the district field, only.
   reduced <- frame[, c('station_id', district)]
 
 
