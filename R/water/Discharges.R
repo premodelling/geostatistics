@@ -26,7 +26,7 @@ Discharges <- function () {
 
 
   # Credentials
-  filestr <- file.path(getwd(), 'R', 'water', 'services.yaml')
+  filestr <- file.path(getwd(), 'R', 'water', 'discharges', 'services.yaml')
   nodes <- yaml::yaml.load_file(input = filestr)
   excerpt <- nodes$services
   key <- excerpt[[1]]
