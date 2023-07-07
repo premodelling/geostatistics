@@ -73,13 +73,9 @@ storage <- file.path(getwd(), 'warehouse', 'hydrometry', 'references')
 UnlinkDirectories(path = storage)
 LinkDirectories(path = storage)
 
-utils::write.table(x = computations,
-                   file = file.path(storage, 'gazetteer.csv'),
-                   append = FALSE,
-                   sep = ',',
-                   row.names = FALSE,
-                   col.names = TRUE,
-                   fileEncoding = 'UTF-8')
+plain <- sf::st_drop_geometry(computations)
+data.table::fwrite(x = plain, file = file.path(storage, 'gazetteer.csv'), append = FALSE,
+                   sep = ',', row.names = FALSE, col.names = TRUE)
 
 
 
