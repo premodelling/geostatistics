@@ -1,5 +1,5 @@
-# Title     : Segments.R
-# Objective : Segments
+# Title     : Intersections.R
+# Objective : Intersections
 # Created by: greyhypotheses
 # Created on: 06/07/2023
 
@@ -11,7 +11,7 @@
 #' @param frame: Which records of <frame> lie within the district?
 #' @param utm: Universal Transverse Mercator code
 #'
-Segments <- function (district, frame, utm) {
+Intersections <- function (district, frame, utm) {
 
 
   # Polygon
