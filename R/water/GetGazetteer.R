@@ -1,5 +1,5 @@
-# Title     : SegmentsData.R
-# Objective : Segments Data
+# Title     : GetGazetteer.R
+# Objective : Get Gazetteer
 # Created by: greyhypotheses
 # Created on: 06/07/2023
 
@@ -7,7 +7,7 @@
 #' Data
 #'
 #'
-SegmentsData <- function (utm) {
+GetGazetteer <- function (utm) {
 
   # Coordinates
   # utils::read.csv()
