@@ -1,0 +1,14 @@
+<PAMDataset>
+  <SRS dataAxisToSRSAxisMapping="1,2">PROJCS["WGS 84 / UTM zone 29N",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-9],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","32629"]]</SRS>
+  <GeoTransform> 2.2732034958017000e+005, 2.0000000000000000e+003, 0.0000000000000000e+000, 9.4527756686618004e+005, 0.0000000000000000e+000,-2.0000000000000002e+003</GeoTransform>
+  <PAMRasterBand band="1">
+    <Description>distances</Description>
+    <NoDataValue>2.55000000000000E+002</NoDataValue>
+    <Metadata>
+      <MDI key="STATISTICS_MAXIMUM">27</MDI>
+      <MDI key="STATISTICS_MEAN">-9999</MDI>
+      <MDI key="STATISTICS_MINIMUM">0</MDI>
+      <MDI key="STATISTICS_STDDEV">-9999</MDI>
+    </Metadata>
+  </PAMRasterBand>
+</PAMDataset>
