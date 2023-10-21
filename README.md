@@ -2,8 +2,23 @@
 
 **Geostatistics**
 
-Building on ``CHIC563: Geostatistics``
+<br>
 
+### Disk Geocomputation Data
+
+Presently:
+* [Elevation focused topographic map of the world](data/elevation/wc2.1_30s_elev.tif)
+* [England's River Basin Districts](data/shapes/basin/districts/)
+
+<br>
+
+References:
+* [Department for Environment Food & Rural Affairs API (Application Programming Interface) Options](https://environment.data.gov.uk/apiportal)
+  * [England's River Basin Districts](https://environment.data.gov.uk/catchment-planning)
+  * [Water Quality Measurements Archive](https://environment.data.gov.uk/water-quality/view/doc/reference)
+
+
+<br>
 <br>
 
 ### Notes
@@ -56,6 +71,11 @@ Tools:
 
 <br>
 <br>
+
+<br>
+<br>
+
+Building on masters data science module ``CHIC563: Geostatistics``
 
 <br>
 <br>
